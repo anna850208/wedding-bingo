@@ -1,104 +1,88 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="zh-TW">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宜芝 & 博鈞 Wedding Bingo</title>
+    <style>
+        body { 
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; 
+            background-color: #fffafb; 
+            display: flex; flex-direction: column; align-items: center; 
+            padding: 10px; margin: 0;
+        }
+        h1 { color: #e5989b; margin-top: 25px; font-size: 26px; letter-spacing: 2px; }
+        .subtitle { color: #b5838d; font-size: 16px; margin-bottom: 20px; }
+
+        .bingo-container {
+            background: white; padding: 10px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(229, 152, 155, 0.15);
+            border: 1px solid #ffeaec;
+        }
+
+        /* 調整重點：加大網格寬度到 350px (或更高) */
+        .bingo-grid {
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px; /* 格子間距加大，比較不會點錯 */
+            width: 350px; 
+            max-width: 92vw; /* 確保在小手機上也不會超出螢幕 */
+        }
+
+        .cell {
+            aspect-ratio: 1/1; background: #fffcfd;
+            border: 2px solid #ffeaec; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            /* 調整重點：字體加大到 24px 並加粗 */
+            font-size: 24px; 
+            font-weight: 900; 
+            color: #5d5461;
+            cursor: pointer; transition: 0.2s;
+        }
+
+        .cell.active {
+            background-color: #ffb4a2; color: white;
+            border-color: #e5989b; transform: scale(0.92);
+        }
+
+        .cell.free { background-color: #ffcdb2; color: #6d6875; font-size: 16px; }
+
+        .footer { margin-top: 30px; font-size: 14px; color: #b5838d; line-height: 1.6; text-align: center; }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="zh-TW"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;宜芝 &amp; 博鈞 Wedding Bingo&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>body {<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #fffafb;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex; flex-direction: column; align-items: center;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px; margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>h1 { color: #e5989b; margin-top: 25px; font-size: 26px; letter-spacing: 2px; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.subtitle { color: #b5838d; font-size: 16px; margin-bottom: 20px; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.bingo-container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: white; padding: 10px; border-radius: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 30px rgba(229, 152, 155, 0.15);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #ffeaec;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* 調整重點：加大網格寬度到 350px (或更高) */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.bingo-grid {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: grid;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: repeat(5, 1fr);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 12px; /* 格子間距加大，比較不會點錯 */</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 350px;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 92vw; /* 確保在小手機上也不會超出螢幕 */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.cell {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>aspect-ratio: 1/1; background: #fffcfd;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 2px solid #ffeaec; border-radius: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex; align-items: center; justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>/* 調整重點：字體加大到 24px 並加粗 */</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 24px;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 900;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #5d5461;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer; transition: 0.2s;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.cell.active {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #ffb4a2; color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-color: #e5989b; transform: scale(0.92);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.cell.free { background-color: #ffcdb2; color: #6d6875; font-size: 16px; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.footer { margin-top: 30px; font-size: 14px; color: #b5838d; line-height: 1.6; text-align: center; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;✨ 宜芝 &amp; 博鈞 ✨&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="subtitle"&gt;讓幸福連成一線 🌸&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="bingo-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="bingo-grid" id="bingoBoard"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="footer"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>2027下半年 ‧ 期待與您分享幸福&lt;br&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>❤️ 執子之手，與子偕老 ❤️</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const board = document.getElementById('bingoBoard');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let nums = [];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>for (let i = 1; i &lt;= 75; i++) nums.push(i);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function shuffle(array) { return array.sort(() =&gt; Math.random() - 0.5); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const selectedNums = shuffle([...nums]).slice(0, 25);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>selectedNums.forEach((num, index) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const cell = document.createElement('div');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cell.className = 'cell';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (index === 12) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>cell.innerText = "FREE";</p>
-<p class="p1"><span class="Apple-converted-space">                </span>cell.classList.add('active', 'free');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>cell.innerText = num;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>cell.onclick = function() { this.classList.toggle('active'); };</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>board.appendChild(cell);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+
+    <h1>✨ 宜芝 & 博鈞 ✨</h1>
+    <div class="subtitle">讓幸福連成一線 🌸</div>
+
+    <div class="bingo-container">
+        <div class="bingo-grid" id="bingoBoard"></div>
+    </div>
+
+    <div class="footer">
+        2027下半年 ‧ 期待與您分享幸福<br>
+        ❤️ 執子之手，與子偕老 ❤️
+    </div>
+
+    <script>
+        const board = document.getElementById('bingoBoard');
+        let nums = [];
+        for (let i = 1; i <= 75; i++) nums.push(i);
+        function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
+        const selectedNums = shuffle([...nums]).slice(0, 25);
+
+        selectedNums.forEach((num, index) => {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            if (index === 12) {
+                cell.innerText = "FREE";
+                cell.classList.add('active', 'free');
+            } else {
+                cell.innerText = num;
+                cell.onclick = function() { this.classList.toggle('active'); };
+            }
+            board.appendChild(cell);
+        });
+    </script>
 </body>
 </html>
