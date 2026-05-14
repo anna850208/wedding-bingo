@@ -12,97 +12,80 @@
         body {
             font-family: 'Noto Serif TC', serif;
             background: linear-gradient(135deg, #fffafb 0%, #ffedef 100%);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-height: 100vh; margin: 0; overflow: hidden; position: relative;
+            display: flex; flex-direction: column; align-items: center; 
+            justify-content: space-between; /* 均勻分配頂、中、底空間 */
+            height: 100vh; margin: 0; padding: 40px 0; box-sizing: border-box; overflow: hidden;
         }
 
-        .decoration { position: absolute; color: var(--primary); opacity: 0.1; font-size: 180px; z-index: 0; pointer-events: none; }
-        .top-left { top: -20px; left: -20px; transform: rotate(-15deg); }
-        .bottom-right { bottom: -20px; right: -20px; transform: rotate(165deg); }
-
-        /* 右上角音樂按鈕：字體統一為 Dancing Script */
-        .music-ctrl { position: fixed; top: 30px; right: 30px; z-index: 100; }
+        /* 音樂按鈕 */
+        .music-ctrl { position: fixed; top: 20px; right: 20px; z-index: 100; }
         #musicBtn { 
-            padding: 12px 28px; background: white; color: var(--primary); 
-            border: 1.5px solid var(--primary); border-radius: 40px; cursor: pointer; 
-            font-family: 'Dancing Script', cursive; font-size: 20px; /* 字體加大 */
-            box-shadow: 0 4px 15px rgba(229, 152, 155, 0.2);
+            padding: 10px 25px; background: white; color: var(--primary); 
+            border: 1px solid var(--primary); border-radius: 40px; cursor: pointer; 
+            font-family: 'Dancing Script', cursive; font-size: 18px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
-        /* 歷史紀錄區：標題加大 */
-        .history-top {
-            position: fixed; top: 0; left: 0; width: 100%; padding: 70px 0 20px 0;
-            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); z-index: 5;
-            text-align: center; border-bottom: 1px solid rgba(255,255,255,0.4);
-        }
-        .history-top h3 { 
+        /* 頂部：歷史紀錄 */
+        .top-container { width: 100%; text-align: center; flex: 0 0 auto; }
+        .top-container h3 { 
             font-family: 'Dancing Script', cursive; color: var(--secondary); 
-            font-size: 36px; /* 標題大幅加大 */
-            margin: 0 0 15px 0; letter-spacing: 2px;
+            font-size: 32px; margin: 0 0 10px 0; 
         }
-        #historyList { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding: 0 30px; }
+        #historyList { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-height: 80px; overflow: hidden; }
         .history-item {
-            background: white; color: var(--primary); width: 45px; height: 45px;
+            background: white; color: var(--primary); width: 40px; height: 40px;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; font-size: 20px; font-weight: bold; box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            border-radius: 50%; font-size: 18px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        /* 標題區：純中文與 Slogan */
-        .header-section { text-align: center; margin-top: 120px; margin-bottom: 40px; z-index: 10; }
+        /* 中間：名字與號碼球 */
+        .mid-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
         .chi-name { 
-            font-size: 68px; color: var(--secondary); font-weight: 700;
-            letter-spacing: 20px; margin-bottom: 20px; display: block;
+            font-size: 56px; color: var(--secondary); font-weight: 700;
+            letter-spacing: 15px; margin-bottom: 10px;
         }
         .wedding-slogan { 
-            font-size: 28px; color: var(--secondary); font-weight: 300;
-            letter-spacing: 10px; padding: 10px 50px;
-            border-top: 1px solid var(--accent); border-bottom: 1px solid var(--accent);
-            display: inline-block;
+            font-size: 24px; color: var(--secondary); font-weight: 300;
+            letter-spacing: 6px; padding: 5px 30px; border-top: 1px solid var(--accent); border-bottom: 1px solid var(--accent);
+            margin-bottom: 30px;
         }
 
-        /* 主號碼球：大幅加大 */
         #currentNum {
-            font-size: 220px; /* 數字加大 */
-            font-weight: 900; color: var(--secondary);
-            background: white; width: 380px; height: 380px; /* 球體加大 */
+            font-size: 160px; font-weight: 900; color: var(--secondary);
+            background: white; width: 280px; height: 280px;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; border: 18px solid white;
-            box-shadow: 0 30px 80px rgba(229, 152, 155, 0.2);
-            margin-bottom: 50px; z-index: 10;
+            border-radius: 50%; border: 15px solid white;
+            box-shadow: 0 20px 60px rgba(229, 152, 155, 0.2);
         }
 
+        /* 底部：按鈕 */
+        .bottom-container { flex: 0 0 auto; width: 100%; text-align: center; }
         #drawBtn {
-            padding: 22px 120px; font-size: 32px; background: var(--primary);
-            color: white; border: none; border-radius: 60px; cursor: pointer;
-            box-shadow: 0 15px 40px rgba(229, 152, 155, 0.4);
-            font-weight: 700; z-index: 10; letter-spacing: 6px; transition: 0.3s;
+            padding: 18px 100px; font-size: 28px; background: var(--primary);
+            color: white; border: none; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 10px 30px rgba(229, 152, 155, 0.3);
+            font-weight: 700; letter-spacing: 4px;
         }
-        #drawBtn:hover { transform: scale(1.05); background: #d4878a; }
-        #drawBtn:disabled { background: #eac0c2; transform: scale(1); }
     </style>
 </head>
 <body>
-    <div class="decoration top-left">✿</div>
-    <div class="decoration bottom-right">✿</div>
+    <div class="music-ctrl"><button id="musicBtn" onclick="toggleMusic()">🎵 Wedding Day</button></div>
 
-    <div class="music-ctrl">
-        <button id="musicBtn" onclick="toggleMusic()">🎵 Wedding Day</button>
-    </div>
-
-    <!-- 歷史紀錄 -->
-    <div class="history-top">
+    <div class="top-container">
         <h3>Lucky Moments</h3>
         <div id="historyList"></div>
     </div>
 
-    <div class="header-section">
+    <div class="mid-container">
         <span class="chi-name">博鈞 ＆ 宜芝</span>
         <div class="wedding-slogan">博得此生，宜然相守</div>
+        <div id="currentNum">?</div>
     </div>
-    
-    <div id="currentNum">?</div>
-    
-    <button id="drawBtn" onclick="drawNumber()">抽出幸運號碼</button>
+
+    <div class="bottom-container">
+        <button id="drawBtn" onclick="drawNumber()">抽出幸運號碼</button>
+    </div>
 
     <audio id="bgMusic" loop><source src="bgm.mp3" type="audio/mpeg"></audio>
 
@@ -125,12 +108,12 @@
             let timer = setInterval(() => {
                 display.innerText = Math.floor(Math.random() * 75) + 1;
                 count++;
-                if (count > 25) {
+                if (count > 20) {
                     clearInterval(timer);
                     const idx = Math.floor(Math.random() * numbers.length);
                     const picked = numbers.splice(idx, 1)[0];
                     display.innerText = picked;
-                    confetti({ particleCount: 200, spread: 80, origin: { y: 0.7 }, colors: ['#e5989b', '#ffb4a2', '#ffffff'] });
+                    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#e5989b', '#ffb4a2', '#ffffff'] });
                     history.unshift(picked);
                     renderHistory();
                     drawBtn.disabled = false;
