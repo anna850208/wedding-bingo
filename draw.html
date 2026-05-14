@@ -27,53 +27,56 @@
             border-radius: 40px; cursor: pointer; font-family: 'Dancing Script', cursive; font-size: 18px;
         }
 
-        /* 頂部區域：拉高以容納更多號碼 */
-        .history-section { width: 100%; text-align: center; padding-top: 20px; z-index: 10; min-height: 160px; }
+        /* 頂部區域：號碼球層級最高，確保不被遮擋 */
+        .history-section { width: 100%; text-align: center; padding-top: 20px; z-index: 20; min-height: 160px; }
         .history-section h3 { 
             font-family: 'Dancing Script', cursive; color: var(--secondary); 
             font-size: 38px; margin: 0 0 10px 0;
         }
         #historyList { 
             display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; 
-            max-height: 120px; padding: 0 10%; overflow-y: auto;
+            max-height: 150px; padding: 0 10%; overflow-y: visible;
         }
         .history-item {
             background: white; color: var(--primary); width: 38px; height: 38px;
             display: flex; align-items: center; justify-content: center;
             border-radius: 50%; font-size: 18px; font-weight: bold; 
-            box-shadow: 0 4px 10px rgba(229, 152, 155, 0.1); border: 1px solid #fdf0f1;
+            box-shadow: 0 4px 10px rgba(229, 152, 155, 0.15); border: 1px solid #fdf0f1;
+            position: relative; z-index: 21; /* 確保球體在最上層 */
         }
 
-        /* 中間舞台 */
-        .mid-stage { flex: 1; display: flex; flex-direction: column; align-items: center; z-index: 10; width: 100%; position: relative; padding-top: 20px; }
+        /* 中間舞台：設為最底層 z-index: 1 */
+        .mid-stage { flex: 1; display: flex; flex-direction: column; align-items: center; z-index: 1; width: 100%; position: relative; padding-top: 20px; }
         
-        /* 照片區：往中間靠，並對齊 Slogan 高度 */
         .photo-container {
             position: absolute; 
-            width: 90%; /* 控制照片不要貼邊 */
-            top: 75px; /* 這裡手動微調以對齊 Slogan */
+            width: 90%; 
+            top: 75px; 
             display: flex; justify-content: space-between; align-items: flex-start;
             pointer-events: none; z-index: 5;
         }
         .photo-box { 
             width: 260px; height: 390px; 
             border: 1px dashed var(--accent); border-radius: 12px; 
-            background: rgba(255,255,255,0.5); backdrop-filter: blur(2px);
+            background: rgba(255,255,255,0.4); backdrop-filter: blur(2px);
             display: flex; align-items: center; justify-content: center;
             color: var(--secondary); font-size: 14px; text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
+        /* 移除名字後的白框，讓畫面更乾淨 */
         .chi-name { 
             font-size: 46px; color: var(--secondary); font-weight: 700;
             letter-spacing: 12px; margin-bottom: 10px; margin-top: 10px;
+            z-index: 1;
         }
 
         .wedding-slogan { 
             font-size: 20px; font-weight: 300; letter-spacing: 10px; padding: 10px 50px;
-            background: linear-gradient(to right, transparent, rgba(255,180,162,0.15), transparent);
+            /* 移除可能遮擋號碼的背景色，改用單純的邊框裝飾 */
             border-top: 1px solid var(--accent); border-bottom: 1px solid var(--accent);
             color: var(--gold); margin-bottom: 40px;
+            z-index: 1;
         }
 
         #currentNum {
@@ -82,10 +85,11 @@
             display: flex; align-items: center; justify-content: center;
             border-radius: 50%; border: 12px solid white;
             box-shadow: 0 20px 70px rgba(181, 131, 141, 0.1);
+            z-index: 10; /* 球體稍微高於名字，但低於歷史號碼 */
         }
 
         /* 底部 */
-        .bottom-stage { padding-bottom: 40px; z-index: 10; }
+        .bottom-stage { padding-bottom: 40px; z-index: 20; }
         #drawBtn {
             padding: 16px 85px; font-size: 26px; background: var(--primary);
             color: white; border: none; border-radius: 50px; cursor: pointer;
@@ -100,11 +104,13 @@
 
     <div class="music-ctrl"><button id="musicBtn" onclick="toggleMusic()">🎵 Wedding Day</button></div>
 
+    <!-- 歷史號碼區域層級最高 -->
     <div class="history-section">
         <h3>Lucky Moments</h3>
         <div id="historyList"></div>
     </div>
 
+    <!-- 中間文字區域現在是裝飾底層 -->
     <div class="mid-stage">
         <div class="photo-container">
             <div class="photo-box" id="groomBox">新郎照片<br>(對齊 Slogan)</div>
