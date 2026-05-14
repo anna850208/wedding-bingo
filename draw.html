@@ -31,7 +31,7 @@
         .history-section h3 { font-family: 'Dancing Script', cursive; color: var(--secondary); font-size: 34px; margin: 0 0 8px 0; }
         #historyList { 
             display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; 
-            max-height: 120px; padding: 0 30%; 
+            max-height: 120px; padding: 0 32%; 
             overflow-y: visible;
         }
         .history-item {
@@ -43,10 +43,10 @@
 
         .mid-stage { flex: 1; display: flex; flex-direction: column; align-items: center; z-index: 1; width: 100%; position: relative; padding-top: 5px; }
         
-        /* 關鍵修改：照片往內縮至紅線位置 */
+        /* 依據 edited-image_3.png 將容器再加寬至 1200px */
         .photo-container {
             position: absolute; 
-            width: 1000px; /* 固定寬度，讓照片精準收在名字兩側 */
+            width: 1200px; 
             top: 75px; 
             display: flex; 
             justify-content: space-between; 
@@ -103,7 +103,7 @@
 
     <div class="mid-stage">
         <div class="photo-container">
-            <!-- 距離經過計算，完美對齊妳畫的紅線範圍 -->
+            <!-- 容器加寬後，照片會更往左右移動，留出呼吸感 -->
             <div class="photo-box" id="groomBox">新郎婚紗照</div>
             <div class="photo-box" id="brideBox">新娘婚紗照</div>
         </div>
