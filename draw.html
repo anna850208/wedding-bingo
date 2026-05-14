@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --primary: #e5989b; --secondary: #b5838d; --accent: #ffb4a2; --gold: #b08d57; --gold-deep: #8e6d3d; }
+        :root { --primary: #e5989b; --secondary: #b5838d; --accent: #ffb4a2; --gold: #a67c52; --gold-light: #f3e5ab; }
         
         body {
             font-family: 'Noto Serif TC', serif;
@@ -27,14 +27,10 @@
             border-radius: 40px; cursor: pointer; font-family: 'Dancing Script', cursive; font-size: 18px;
         }
 
-        /* 號碼牆：直接顯示，不隱藏滾動 */
+        /* 號碼牆區域 */
         .history-section { width: 100%; text-align: center; padding-top: 15px; z-index: 20; min-height: 140px; }
         .history-section h3 { font-family: 'Dancing Script', cursive; color: var(--secondary); font-size: 34px; margin: 0 0 5px 0; }
-        
-        #historyList { 
-            display: grid; grid-template-columns: repeat(15, 34px); justify-content: center; gap: 6px; 
-            padding: 5px;
-        }
+        #historyList { display: grid; grid-template-columns: repeat(15, 34px); justify-content: center; gap: 6px; padding: 5px; }
 
         .history-item {
             background: white; color: var(--primary); width: 34px; height: 34px;
@@ -43,40 +39,46 @@
             box-shadow: 0 4px 10px rgba(229, 152, 155, 0.12); border: 1px solid #fdf0f1;
         }
 
-        .mid-stage { flex: 1; display: flex; flex-direction: column; align-items: center; z-index: 1; width: 100%; position: relative; padding-top: 40px; }
+        /* 依據 edited-image_4.png 整體下移，避免壓迫感 */
+        .mid-stage { flex: 1; display: flex; flex-direction: column; align-items: center; z-index: 1; width: 100%; position: relative; padding-top: 60px; }
         
-        .photo-container { position: absolute; width: 1200px; top: 75px; display: flex; justify-content: space-between; pointer-events: none; z-index: 5; }
+        .photo-container { position: absolute; width: 1200px; top: 90px; display: flex; justify-content: space-between; pointer-events: none; z-index: 5; }
         .photo-box { 
             width: 320px; height: 480px; border: 1px dashed var(--accent); border-radius: 15px; 
             background: rgba(255,255,255,0.2); backdrop-filter: blur(2px);
             display: flex; align-items: center; justify-content: center;
             color: var(--secondary); font-size: 16px; text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.04);
         }
 
         .chi-name { 
             font-size: 44px; color: var(--secondary); font-weight: 700;
-            letter-spacing: 12px; margin-bottom: 15px;
+            letter-spacing: 12px; margin-bottom: 20px;
         }
 
-        /* ✨ 強化顯眼度：深玫瑰金漸層 + 文字陰影 */
+        /* ✨ 強化效果：光影掃過流金色文字 */
         .wedding-slogan { 
-            font-size: 20px; font-weight: 700; letter-spacing: 10px;
-            padding: 12px 50px;
-            background: linear-gradient(135deg, var(--gold-deep) 0%, var(--gold) 50%, var(--gold-deep) 100%);
+            font-size: 22px; font-weight: 700; letter-spacing: 12px;
+            padding: 12px 55px;
+            background: linear-gradient(to right, var(--gold) 20%, var(--gold-light) 40%, var(--gold-light) 60%, var(--gold) 80%);
+            background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0px 2px 3px rgba(0,0,0,0.05); /* 輕微陰影增加立體感 */
             position: relative;
-            margin-bottom: 35px;
+            margin-bottom: 40px;
+            animation: shine 4s linear infinite;
+            filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
         }
 
         .wedding-slogan::before, .wedding-slogan::after {
-            content: ""; position: absolute; left: 5%; right: 5%;
-            height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent);
+            content: ""; position: absolute; left: 0; right: 0;
+            height: 1.5px; background: linear-gradient(to right, transparent, var(--gold), transparent);
         }
         .wedding-slogan::before { top: 0; }
         .wedding-slogan::after { bottom: 0; }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
 
         #currentNum {
             font-size: 110px; font-weight: 900; color: var(--secondary);
@@ -87,9 +89,9 @@
             z-index: 10;
         }
 
-        .bottom-stage { padding-bottom: 50px; z-index: 20; }
+        .bottom-stage { padding-bottom: 60px; z-index: 20; }
         #drawBtn {
-            padding: 16px 90px; font-size: 24px; background: var(--primary);
+            padding: 18px 100px; font-size: 24px; background: var(--primary);
             color: white; border: none; border-radius: 60px; cursor: pointer;
             box-shadow: 0 10px 30px rgba(229, 152, 155, 0.3);
             font-weight: 700; letter-spacing: 4px;
