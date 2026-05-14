@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --primary: #e5989b; --secondary: #b5838d; --accent: #ffb4a2; --gold: #a67c52; --gold-light: #f3e5ab; }
+        :root { --primary: #e5989b; --secondary: #b5838d; --accent: #ffb4a2; --gold-dark: #8c6a3c; --gold-main: #b08d57; }
         
         body {
             font-family: 'Noto Serif TC', serif;
@@ -39,7 +39,7 @@
             box-shadow: 0 4px 10px rgba(229, 152, 155, 0.12); border: 1px solid #fdf0f1;
         }
 
-        /* 依據 edited-image_4.png 整體下移，避免壓迫感 */
+        /* 版面空間分配：參考 edited-image_4.png 整體下移 */
         .mid-stage { flex: 1; display: flex; flex-direction: column; align-items: center; z-index: 1; width: 100%; position: relative; padding-top: 60px; }
         
         .photo-container { position: absolute; width: 1200px; top: 90px; display: flex; justify-content: space-between; pointer-events: none; z-index: 5; }
@@ -52,33 +52,31 @@
 
         .chi-name { 
             font-size: 44px; color: var(--secondary); font-weight: 700;
-            letter-spacing: 12px; margin-bottom: 20px;
+            letter-spacing: 12px; margin-bottom: 18px;
         }
 
-        /* ✨ 強化效果：光影掃過流金色文字 */
+        /* ✨ 靜態立體金屬質感：顯眼且極具份量感 */
         .wedding-slogan { 
-            font-size: 22px; font-weight: 700; letter-spacing: 12px;
-            padding: 12px 55px;
-            background: linear-gradient(to right, var(--gold) 20%, var(--gold-light) 40%, var(--gold-light) 60%, var(--gold) 80%);
-            background-size: 200% auto;
+            font-size: 22px; font-weight: 700; letter-spacing: 10px;
+            padding: 10px 60px;
+            /* 霧金漸層：從深金到亮金再到深金 */
+            background: linear-gradient(180deg, var(--gold-main) 0%, var(--gold-dark) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            /* 立體投影效果：讓字體浮現 */
+            filter: drop-shadow(0px 3px 2px rgba(140, 106, 60, 0.3));
             position: relative;
-            margin-bottom: 40px;
-            animation: shine 4s linear infinite;
-            filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
+            margin-bottom: 45px;
         }
 
+        /* 優化裝飾線：增加一點厚度感 */
         .wedding-slogan::before, .wedding-slogan::after {
-            content: ""; position: absolute; left: 0; right: 0;
-            height: 1.5px; background: linear-gradient(to right, transparent, var(--gold), transparent);
+            content: ""; position: absolute; left: 5%; right: 5%;
+            height: 2px; background: linear-gradient(to right, transparent, var(--gold-main), transparent);
+            opacity: 0.6;
         }
         .wedding-slogan::before { top: 0; }
         .wedding-slogan::after { bottom: 0; }
-
-        @keyframes shine {
-            to { background-position: 200% center; }
-        }
 
         #currentNum {
             font-size: 110px; font-weight: 900; color: var(--secondary);
