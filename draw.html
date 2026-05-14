@@ -13,83 +13,85 @@
             font-family: 'Noto Serif TC', serif;
             background: radial-gradient(circle at 50% 35%, #ffffff 0%, #fffbfb 100%);
             display: flex; flex-direction: column; align-items: center; 
-            justify-content: space-between; height: 100vh; margin: 0; padding: 30px 0; box-sizing: border-box; overflow: hidden;
+            height: 100vh; margin: 0; padding: 0; box-sizing: border-box; overflow: hidden;
             position: relative;
         }
 
-        /* 裝飾背景 */
-        .decoration { position: absolute; color: var(--primary); opacity: 0.12; font-size: 240px; z-index: 0; pointer-events: none; }
+        .decoration { position: absolute; color: var(--primary); opacity: 0.1; font-size: 240px; z-index: 0; pointer-events: none; }
         .top-left { top: -60px; left: -60px; transform: rotate(-15deg); }
         .bottom-right { bottom: -60px; right: -60px; transform: rotate(165deg); }
 
-        .music-ctrl { position: fixed; top: 25px; right: 25px; z-index: 100; }
+        .music-ctrl { position: fixed; top: 20px; right: 20px; z-index: 100; }
         #musicBtn { 
-            padding: 10px 24px; background: white; color: var(--secondary); border: 1.5px solid var(--accent); 
-            border-radius: 40px; cursor: pointer; font-family: 'Dancing Script', cursive; font-size: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            padding: 8px 20px; background: white; color: var(--secondary); border: 1px solid var(--accent); 
+            border-radius: 40px; cursor: pointer; font-family: 'Dancing Script', cursive; font-size: 18px;
         }
 
-        /* 頂部：Lucky Moments (間距拉開) */
-        .history-section { width: 100%; text-align: center; margin-top: 40px; z-index: 10; }
+        /* 頂部區域：拉高以容納更多號碼 */
+        .history-section { width: 100%; text-align: center; padding-top: 20px; z-index: 10; min-height: 160px; }
         .history-section h3 { 
             font-family: 'Dancing Script', cursive; color: var(--secondary); 
-            font-size: 40px; margin: 0 0 20px 0;
+            font-size: 38px; margin: 0 0 10px 0;
         }
-        #historyList { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-height: 100px; padding: 0 15%; }
+        #historyList { 
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; 
+            max-height: 120px; padding: 0 10%; overflow-y: auto;
+        }
         .history-item {
-            background: white; color: var(--primary); width: 44px; height: 44px;
+            background: white; color: var(--primary); width: 38px; height: 38px;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; font-size: 20px; font-weight: bold; 
-            box-shadow: 0 4px 12px rgba(229, 152, 155, 0.15); border: 1px solid #fdf0f1;
+            border-radius: 50%; font-size: 18px; font-weight: bold; 
+            box-shadow: 0 4px 10px rgba(229, 152, 155, 0.1); border: 1px solid #fdf0f1;
         }
 
-        /* 中間舞台：照片與內容 */
-        .mid-stage { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; width: 100%; position: relative; }
+        /* 中間舞台 */
+        .mid-stage { flex: 1; display: flex; flex-direction: column; align-items: center; z-index: 10; width: 100%; position: relative; padding-top: 20px; }
         
-        /* 照片預留區：大幅放大 */
+        /* 照片區：往中間靠，並對齊 Slogan 高度 */
         .photo-container {
-            position: absolute; width: 100%; top: 50%; transform: translateY(-50%);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 3%; pointer-events: none; z-index: 5;
+            position: absolute; 
+            width: 90%; /* 控制照片不要貼邊 */
+            top: 75px; /* 這裡手動微調以對齊 Slogan */
+            display: flex; justify-content: space-between; align-items: flex-start;
+            pointer-events: none; z-index: 5;
         }
         .photo-box { 
-            width: 280px; height: 420px; /* 從 180x260 大幅增加 */
-            border: 1px dashed var(--accent); border-radius: 15px; 
-            background: rgba(255,255,255,0.4); backdrop-filter: blur(2px);
+            width: 260px; height: 390px; 
+            border: 1px dashed var(--accent); border-radius: 12px; 
+            background: rgba(255,255,255,0.5); backdrop-filter: blur(2px);
             display: flex; align-items: center; justify-content: center;
             color: var(--secondary); font-size: 14px; text-align: center;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
         .chi-name { 
-            font-size: 42px; color: var(--secondary); font-weight: 700;
-            letter-spacing: 12px; margin-bottom: 15px;
+            font-size: 46px; color: var(--secondary); font-weight: 700;
+            letter-spacing: 12px; margin-bottom: 10px; margin-top: 10px;
         }
 
         .wedding-slogan { 
-            font-size: 18px; font-weight: 300; letter-spacing: 12px; padding: 12px 60px;
-            background: linear-gradient(to right, transparent, rgba(255,180,162,0.18), transparent);
+            font-size: 20px; font-weight: 300; letter-spacing: 10px; padding: 10px 50px;
+            background: linear-gradient(to right, transparent, rgba(255,180,162,0.15), transparent);
             border-top: 1px solid var(--accent); border-bottom: 1px solid var(--accent);
-            color: var(--gold); margin-bottom: 45px;
+            color: var(--gold); margin-bottom: 40px;
         }
 
         #currentNum {
-            font-size: 120px; font-weight: 900; color: var(--secondary);
-            background: white; width: 230px; height: 230px;
+            font-size: 130px; font-weight: 900; color: var(--secondary);
+            background: white; width: 250px; height: 250px;
             display: flex; align-items: center; justify-content: center;
             border-radius: 50%; border: 12px solid white;
             box-shadow: 0 20px 70px rgba(181, 131, 141, 0.1);
         }
 
-        /* 底部：抽獎按鈕 */
-        .bottom-stage { margin-bottom: 30px; z-index: 10; }
+        /* 底部 */
+        .bottom-stage { padding-bottom: 40px; z-index: 10; }
         #drawBtn {
-            padding: 16px 90px; font-size: 28px; background: var(--primary);
-            color: white; border: none; border-radius: 60px; cursor: pointer;
-            box-shadow: 0 12px 35px rgba(229, 152, 155, 0.35);
-            font-weight: 700; letter-spacing: 6px; transition: 0.3s;
+            padding: 16px 85px; font-size: 26px; background: var(--primary);
+            color: white; border: none; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 10px 30px rgba(229, 152, 155, 0.3);
+            font-weight: 700; letter-spacing: 4px;
         }
-        #drawBtn:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(229, 152, 155, 0.45); }
     </style>
 </head>
 <body>
@@ -105,8 +107,8 @@
 
     <div class="mid-stage">
         <div class="photo-container">
-            <div class="photo-box" id="groomBox">新郎照片預留區<br>(280 x 420)</div>
-            <div class="photo-box" id="brideBox">新娘照片預留區<br>(280 x 420)</div>
+            <div class="photo-box" id="groomBox">新郎照片<br>(對齊 Slogan)</div>
+            <div class="photo-box" id="brideBox">新娘照片<br>(對齊 Slogan)</div>
         </div>
 
         <span class="chi-name">博鈞 ＆ 宜芝</span>
@@ -139,15 +141,12 @@
             let timer = setInterval(() => {
                 display.innerText = Math.floor(Math.random() * 75) + 1;
                 count++;
-                if (count > 22) {
+                if (count > 20) {
                     clearInterval(timer);
                     const idx = Math.floor(Math.random() * numbers.length);
                     const picked = numbers.splice(idx, 1)[0];
                     display.innerText = picked;
-                    confetti({ 
-                        particleCount: 250, spread: 90, origin: { y: 0.65 }, 
-                        colors: ['#ff0000', '#ffd700', '#ff69b4', '#00ff00', '#00e5ff', '#ffffff'] 
-                    });
+                    confetti({ particleCount: 200, spread: 80, origin: { y: 0.7 } });
                     history.unshift(picked);
                     renderHistory();
                     drawBtn.disabled = false;
