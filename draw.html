@@ -18,7 +18,6 @@
         }
         h1 { color: #e5989b; font-size: 40px; margin-bottom: 5px; }
         
-        /* 音樂控制區 */
         .music-ctrl {
             position: fixed;
             top: 25px;
@@ -94,14 +93,13 @@
             box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
         @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
     <div class="music-ctrl">
-        <button id="musicBtn" onclick="toggleMusic()">🎵 播放背景音樂</button>
+        <button id="musicBtn" onclick="toggleMusic()">🎵 播放 Wedding Day 音樂</button>
     </div>
 
     <h1>✨ 宜芝 & 博鈞 婚禮抽獎機 ✨</h1>
@@ -113,9 +111,9 @@
         <div id="historyList"></div>
     </div>
 
-    <!-- 使用穩定度極高的 Mixkit 音樂源 -->
+    <!-- 已套用 Wedding Day 的穩定音源 -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3" type="audio/mpeg">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-wedding-day-533.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -124,35 +122,30 @@
         let numbers = Array.from({length: 75}, (_, i) => i + 1);
         let history = [];
 
-        // 設定初始音量
         bgMusic.volume = 0.6;
 
         function toggleMusic() {
             if (bgMusic.paused) {
                 bgMusic.play().then(() => {
                     musicBtn.innerText = "⏸ 暫停音樂";
-                    musicBtn.style.background = "#ffeaec";
                 }).catch(error => {
-                    console.log("播放失敗，請再試一次", error);
-                    alert("請再次點擊按鈕開啟音樂");
+                    alert("請再次點擊播放音樂");
                 });
             } else {
                 bgMusic.pause();
                 musicBtn.innerText = "🎵 播放音樂";
-                musicBtn.style.background = "#fff";
             }
         }
 
         function drawNumber() {
             if (numbers.length === 0) {
-                alert("所有 1-75 號碼都抽完囉！");
+                alert("號碼都抽完囉！");
                 return;
             }
             const btn = document.getElementById('drawBtn');
             const display = document.getElementById('currentNum');
             btn.disabled = true;
 
-            // 隨機跳動效果
             let counter = 0;
             let timer = setInterval(() => {
                 display.innerText = Math.floor(Math.random() * 75) + 1;
