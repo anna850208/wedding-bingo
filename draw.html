@@ -5,29 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>宜芝 & 博鈞 婚禮抽獎機</title>
     <style>
-        body { font-family: "PingFang TC", sans-serif; background-color: #fffafb; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; }
-        h1 { color: #e5989b; font-size: 40px; margin-bottom: 5px; }
-        .music-ctrl { position: fixed; top: 25px; right: 25px; z-index: 100; }
-        #musicBtn { padding: 12px 20px; font-size: 16px; background: #fff; color: #e5989b; border: 2px solid #e5989b; border-radius: 30px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(229,152,155,0.2); }
-        #currentNum { font-size: 180px; font-weight: 900; color: #b5838d; background: white; width: 300px; height: 300px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 10px 40px rgba(229, 152, 155, 0.2); border: 10px solid #ffeaec; margin: 20px 0; }
-        #drawBtn { padding: 20px 60px; font-size: 30px; background-color: #e5989b; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 6px 20px rgba(229, 152, 155, 0.4); margin-bottom: 35px; }
-        .history { width: 95%; max-width: 1000px; text-align: center; background: rgba(255, 255, 255, 0.6); padding: 25px; border-radius: 25px; }
-        .history-item { background: #ffb4a2; color: white; width: 65px; height: 65px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 30px; font-weight: 900; margin: 5px; display: inline-flex; }
+        :root {
+            --primary: #e5989b;
+            --secondary: #b5838d;
+            --accent: #ffb4a2;
+            --bg: #fffafb;
+        }
+        body {
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+            background: var(--bg);
+            background-image: radial-gradient(#ffeaec 2px, transparent 2px);
+            background-size: 30px 30px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh; margin: 0; overflow-x: hidden;
+        }
+        .music-ctrl { position: fixed; top: 20px; right: 20px; z-index: 100; }
+        #musicBtn {
+            padding: 10px 20px; background: white; color: var(--primary);
+            border: 2px solid var(--primary); border-radius: 30px; cursor: pointer;
+            font-weight: bold; box-shadow: 0 4px 10px rgba(229,152,155,0.2);
+        }
+        h1 { color: var(--secondary); font-size: 42px; text-shadow: 2px 2px 4px rgba(0,0,0,0.05); margin-top: 40px; }
+        
+        /* 號碼顯示大球 */
+        #currentNum {
+            font-size: 200px; font-weight: 900; color: var(--secondary);
+            background: white; width: 320px; height: 320px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; border: 12px solid #ffeaec;
+            box-shadow: 0 20px 50px rgba(181, 131, 141, 0.15);
+            margin: 30px 0; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .rolling { animation: shake 0.1s infinite; color: #ffcdb2 !important; }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            50% { transform: translate(-1px, -2px) rotate(-1deg); }
+            100% { transform: translate(1px, -1px) rotate(1deg); }
+        }
+        .pop { animation: popLarge 0.5s ease-out; }
+        @keyframes popLarge {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        #drawBtn {
+            padding: 20px 80px; font-size: 32px; background: var(--primary);
+            color: white; border: none; border-radius: 60px; cursor: pointer;
+            box-shadow: 0 8px 25px rgba(229, 152, 155, 0.4); transition: 0.3s;
+            z-index: 10;
+        }
+        #drawBtn:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(229, 152, 155, 0.5); }
+        #drawBtn:active { transform: translateY(2px); }
+        #drawBtn:disabled { background: #d1d1d1; box-shadow: none; cursor: not-allowed; }
+
+        .history {
+            width: 90%; max-width: 1100px; margin-top: 50px; text-align: center;
+            background: rgba(255, 255, 255, 0.7); padding: 30px; border-radius: 30px;
+            backdrop-filter: blur(5px); border: 1px solid white;
+        }
+        #historyList { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; }
+        .history-item {
+            background: var(--accent); color: white; width: 70px; height: 70px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; font-size: 32px; font-weight: bold;
+            box-shadow: 2px 5px 15px rgba(255, 180, 162, 0.3);
+            animation: slideUp 0.5s ease-out forwards;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
+
     <div class="music-ctrl">
-        <button id="musicBtn" onclick="toggleMusic()">🎵 點擊播放音樂</button>
+        <button id="musicBtn" onclick="toggleMusic()">🎵 播放背景音樂</button>
     </div>
-    <h1>✨ 宜芝 & 博鈞 婚禮抽獎機 ✨</h1>
+
+    <h1>✨ 宜芝 & 博鈞 婚禮賓果抽獎 ✨</h1>
+    
     <div id="currentNum">?</div>
-    <button id="drawBtn" onclick="drawNumber()">開始抽號碼</button>
+    
+    <button id="drawBtn" onclick="drawNumber()">抽出幸運號碼</button>
+
     <div class="history">
-        <h3>已抽出的號碼</h3>
+        <h3 style="color: var(--secondary); margin-bottom: 20px;">已抽出的幸運星</h3>
         <div id="historyList"></div>
     </div>
 
-    <!-- 音樂檔直接讀取妳 GitHub 裡的檔案 -->
     <audio id="bgMusic" loop>
         <source src="bgm.mp3" type="audio/mpeg">
     </audio>
@@ -35,6 +99,8 @@
     <script>
         const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
+        const display = document.getElementById('currentNum');
+        const drawBtn = document.getElementById('drawBtn');
         let numbers = Array.from({length: 75}, (_, i) => i + 1);
         let history = [];
 
@@ -49,24 +115,37 @@
         }
 
         function drawNumber() {
-            if (numbers.length === 0) return;
-            const btn = document.getElementById('drawBtn');
-            const display = document.getElementById('currentNum');
-            btn.disabled = true;
+            if (numbers.length === 0) { alert("號碼已經全部抽完囉！"); return; }
+            
+            drawBtn.disabled = true;
+            display.classList.add('rolling');
+            display.classList.remove('pop');
+
             let counter = 0;
             let timer = setInterval(() => {
                 display.innerText = Math.floor(Math.random() * 75) + 1;
                 counter++;
-                if (counter > 15) {
+                if (counter > 25) { // 增加滾動時間讓現場更有期待感
                     clearInterval(timer);
-                    const randomIndex = Math.floor(Math.random() * numbers.length);
-                    const picked = numbers.splice(randomIndex, 1)[0];
-                    history.unshift(picked);
-                    display.innerText = picked;
-                    renderHistory();
-                    btn.disabled = false;
+                    finalizeDraw();
                 }
-            }, 60);
+            }, 50);
+        }
+
+        function finalizeDraw() {
+            const randomIndex = Math.floor(Math.random() * numbers.length);
+            const picked = numbers.splice(randomIndex, 1)[0];
+            
+            history.unshift(picked);
+            
+            display.classList.remove('rolling');
+            display.classList.add('pop');
+            display.innerText = picked;
+            
+            setTimeout(() => {
+                renderHistory();
+                drawBtn.disabled = false;
+            }, 300);
         }
 
         function renderHistory() {
