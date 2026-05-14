@@ -4,91 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>宜芝 & 博鈞 婚禮抽獎機</title>
+    <!-- 引入特效庫 -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --primary: #e5989b;
             --secondary: #b5838d;
-            --accent: #ffb4a2;
-            --bg: #fffafb;
+            --light: #ffeaec;
         }
         body {
             font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
-            background: var(--bg);
-            background-image: radial-gradient(#ffeaec 2px, transparent 2px);
-            background-size: 30px 30px;
+            background: linear-gradient(135deg, #fffafb 0%, #ffedef 100%);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             min-height: 100vh; margin: 0; overflow-x: hidden;
         }
+        
         .music-ctrl { position: fixed; top: 20px; right: 20px; z-index: 100; }
         #musicBtn {
-            padding: 10px 20px; background: white; color: var(--primary);
+            padding: 10px 20px; background: rgba(255,255,255,0.8); color: var(--primary);
             border: 2px solid var(--primary); border-radius: 30px; cursor: pointer;
-            font-weight: bold; box-shadow: 0 4px 10px rgba(229,152,155,0.2);
+            font-weight: bold; backdrop-filter: blur(5px);
         }
-        h1 { color: var(--secondary); font-size: 42px; text-shadow: 2px 2px 4px rgba(0,0,0,0.05); margin-top: 40px; }
-        
-        /* 號碼顯示大球 */
+
+        h1 { color: var(--secondary); font-size: 45px; letter-spacing: 3px; margin-top: 20px; }
+
+        /* 號碼球立體效果 */
         #currentNum {
             font-size: 200px; font-weight: 900; color: var(--secondary);
-            background: white; width: 320px; height: 320px;
+            background: radial-gradient(circle at 30% 30%, #ffffff, #fff0f1);
+            width: 320px; height: 320px;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; border: 12px solid #ffeaec;
-            box-shadow: 0 20px 50px rgba(181, 131, 141, 0.15);
-            margin: 30px 0; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 50%; border: 12px solid white;
+            box-shadow: 0 25px 60px rgba(229, 152, 155, 0.3), inset 0 0 20px rgba(0,0,0,0.05);
+            margin: 30px 0; position: relative;
         }
-        .rolling { animation: shake 0.1s infinite; color: #ffcdb2 !important; }
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            50% { transform: translate(-1px, -2px) rotate(-1deg); }
-            100% { transform: translate(1px, -1px) rotate(1deg); }
+
+        /* 抽獎時的瘋狂旋轉 */
+        .rolling-anim { animation: spin 0.1s infinite linear; filter: blur(1px); }
+        @keyframes spin {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.05) rotate(2deg); }
+            100% { transform: scale(1) rotate(0deg); }
         }
-        .pop { animation: popLarge 0.5s ease-out; }
-        @keyframes popLarge {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            50% { transform: scale(1.1); }
+
+        /* 中獎後的放大特效 */
+        .winner-anim { animation: winner 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes winner {
+            0% { transform: scale(0.5); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
 
         #drawBtn {
-            padding: 20px 80px; font-size: 32px; background: var(--primary);
+            padding: 22px 90px; font-size: 34px; background: var(--primary);
             color: white; border: none; border-radius: 60px; cursor: pointer;
-            box-shadow: 0 8px 25px rgba(229, 152, 155, 0.4); transition: 0.3s;
-            z-index: 10;
+            box-shadow: 0 10px 30px rgba(229, 152, 155, 0.5); transition: 0.4s;
+            font-weight: bold; margin-bottom: 40px;
         }
-        #drawBtn:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(229, 152, 155, 0.5); }
-        #drawBtn:active { transform: translateY(2px); }
-        #drawBtn:disabled { background: #d1d1d1; box-shadow: none; cursor: not-allowed; }
+        #drawBtn:hover { transform: scale(1.1); background: #d4878a; }
+        #drawBtn:disabled { background: #ccc; box-shadow: none; }
 
         .history {
-            width: 90%; max-width: 1100px; margin-top: 50px; text-align: center;
-            background: rgba(255, 255, 255, 0.7); padding: 30px; border-radius: 30px;
-            backdrop-filter: blur(5px); border: 1px solid white;
+            width: 85%; max-width: 1000px; background: rgba(255, 255, 255, 0.5);
+            padding: 30px; border-radius: 40px; border: 2px solid white;
         }
-        #historyList { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; }
+        #historyList { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
         .history-item {
-            background: var(--accent); color: white; width: 70px; height: 70px;
+            background: white; color: var(--primary); width: 60px; height: 60px;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; font-size: 32px; font-weight: bold;
-            box-shadow: 2px 5px 15px rgba(255, 180, 162, 0.3);
-            animation: slideUp 0.5s ease-out forwards;
+            border-radius: 15px; font-size: 28px; font-weight: bold;
+            border: 2px solid var(--light); box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div class="music-ctrl">
-        <button id="musicBtn" onclick="toggleMusic()">🎵 播放背景音樂</button>
+        <button id="musicBtn" onclick="toggleMusic()">🎵 播放音樂</button>
     </div>
 
-    <h1>✨ 宜芝 & 博鈞 婚禮賓果抽獎 ✨</h1>
+    <h1>✨ 宜芝 ＆ 博鈞 ✨</h1>
     
     <div id="currentNum">?</div>
     
-    <button id="drawBtn" onclick="drawNumber()">抽出幸運號碼</button>
+    <button id="drawBtn" onclick="drawNumber()">抽出幸運兒</button>
 
     <div class="history">
-        <h3 style="color: var(--secondary); margin-bottom: 20px;">已抽出的幸運星</h3>
+        <h3 style="color: var(--secondary);">已揭曉號碼</h3>
         <div id="historyList"></div>
     </div>
 
@@ -98,54 +99,49 @@
 
     <script>
         const bgMusic = document.getElementById('bgMusic');
-        const musicBtn = document.getElementById('musicBtn');
         const display = document.getElementById('currentNum');
         const drawBtn = document.getElementById('drawBtn');
         let numbers = Array.from({length: 75}, (_, i) => i + 1);
         let history = [];
 
         function toggleMusic() {
-            if (bgMusic.paused) {
-                bgMusic.play();
-                musicBtn.innerText = "⏸ 暫停音樂";
-            } else {
-                bgMusic.pause();
-                musicBtn.innerText = "🎵 播放音樂";
-            }
+            if (bgMusic.paused) { bgMusic.play(); document.getElementById('musicBtn').innerText = "⏸ 暫停音樂"; }
+            else { bgMusic.pause(); document.getElementById('musicBtn').innerText = "🎵 播放音樂"; }
         }
 
         function drawNumber() {
-            if (numbers.length === 0) { alert("號碼已經全部抽完囉！"); return; }
+            if (numbers.length === 0) return;
             
             drawBtn.disabled = true;
-            display.classList.add('rolling');
-            display.classList.remove('pop');
+            display.classList.add('rolling-anim');
+            display.classList.remove('winner-anim');
 
-            let counter = 0;
+            let count = 0;
+            let speed = 50;
             let timer = setInterval(() => {
                 display.innerText = Math.floor(Math.random() * 75) + 1;
-                counter++;
-                if (counter > 25) { // 增加滾動時間讓現場更有期待感
+                count++;
+                if (count > 30) {
                     clearInterval(timer);
-                    finalizeDraw();
-                }
-            }, 50);
-        }
+                    const idx = Math.floor(Math.random() * numbers.length);
+                    const picked = numbers.splice(idx, 1)[0];
+                    
+                    display.classList.remove('rolling-anim');
+                    display.innerText = picked;
+                    display.classList.add('winner-anim');
+                    
+                    // 噴發彩帶特效！
+                    confetti({
+                        particleCount: 150,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#e5989b', '#b5838d', '#ffb4a2']
+                    });
 
-        function finalizeDraw() {
-            const randomIndex = Math.floor(Math.random() * numbers.length);
-            const picked = numbers.splice(randomIndex, 1)[0];
-            
-            history.unshift(picked);
-            
-            display.classList.remove('rolling');
-            display.classList.add('pop');
-            display.innerText = picked;
-            
-            setTimeout(() => {
-                renderHistory();
-                drawBtn.disabled = false;
-            }, 300);
+                    history.unshift(picked);
+                    setTimeout(() => { renderHistory(); drawBtn.disabled = false; }, 600);
+                }
+            }, speed);
         }
 
         function renderHistory() {
