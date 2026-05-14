@@ -4,85 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>宜芝 & 博鈞 Wedding Bingo</title>
+    <!-- 引入慶祝特效庫 -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        body { 
-            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; 
-            background-color: #fffafb; 
-            display: flex; flex-direction: column; align-items: center; 
-            padding: 10px; margin: 0;
-        }
-        h1 { color: #e5989b; margin-top: 25px; font-size: 26px; letter-spacing: 2px; }
+        body { font-family: "PingFang TC", sans-serif; background-color: #fffafb; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; }
+        h1 { color: #e5989b; margin-top: 25px; font-size: 26px; }
         .subtitle { color: #b5838d; font-size: 16px; margin-bottom: 20px; }
-
-        .bingo-container {
-            background: white; padding: 10px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(229, 152, 155, 0.15);
-            border: 1px solid #ffeaec;
-        }
-
-        /* 調整重點：加大網格寬度到 350px (或更高) */
-        .bingo-grid {
-            display: grid; 
-            grid-template-columns: repeat(5, 1fr);
-            gap: 12px; /* 格子間距加大，比較不會點錯 */
-            width: 350px; 
-            max-width: 92vw; /* 確保在小手機上也不會超出螢幕 */
-        }
-
-        .cell {
-            aspect-ratio: 1/1; background: #fffcfd;
-            border: 2px solid #ffeaec; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            /* 調整重點：字體加大到 24px 並加粗 */
-            font-size: 24px; 
-            font-weight: 900; 
-            color: #5d5461;
-            cursor: pointer; transition: 0.2s;
-        }
-
-        .cell.active {
-            background-color: #ffb4a2; color: white;
-            border-color: #e5989b; transform: scale(0.92);
-        }
+        .bingo-container { background: white; padding: 10px; border-radius: 20px; box-shadow: 0 10px 30px rgba(229, 152, 155, 0.15); border: 1px solid #ffeaec; }
+        .bingo-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; width: 350px; max-width: 92vw; }
+        .cell { aspect-ratio: 1/1; background: #fffcfd; border: 2px solid #ffeaec; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; color: #5d5461; cursor: pointer; transition: 0.3s; }
+        
+        /* 誤按取消 & 選取效果 */
+        .cell.active { background-color: #ffb4a2; color: white; border-color: #e5989b; transform: scale(0.95); }
+        
+        /* 連線成功後的顏色（畫線感） */
+        .cell.win { background-color: #e5989b !important; animation: pulse 0.5s infinite alternate; }
+        @keyframes pulse { from { transform: scale(0.95); } to { transform: scale(1.05); } }
 
         .cell.free { background-color: #ffcdb2; color: #6d6875; font-size: 16px; }
+        .footer { margin-top: 30px; font-size: 14px; color: #b5838d; text-align: center; }
 
-        .footer { margin-top: 30px; font-size: 14px; color: #b5838d; line-height: 1.6; text-align: center; }
+        /* 慶祝彈窗 */
+        #winMessage {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; padding: 30px; border-radius: 20px; box-shadow: 0 0 50px rgba(0,0,0,0.2);
+            z-index: 100; text-align: center; width: 80%; border: 3px solid #e5989b;
+        }
+        #winMessage h2 { color: #e5989b; margin: 0; }
+        #winMessage button { margin-top: 20px; padding: 10px 20px; background: #e5989b; color: white; border: none; border-radius: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <h1>✨ 宜芝 & 博鈞 ✨</h1>
-    <div class="subtitle">讓幸福連成一線 🌸</div>
+    <div class="subtitle">連成三線，幸福連線！🌸</div>
 
     <div class="bingo-container">
         <div class="bingo-grid" id="bingoBoard"></div>
     </div>
 
+    <div id="winMessage">
+        <h2>🎉 恭喜中獎！ 🎉</h2>
+        <p>您已達成三條線！趕快舉手找工作人員領獎喔！</p>
+        <button onclick="document.getElementById('winMessage').style.display='none'">回畫面</button>
+    </div>
+
     <div class="footer">
-        2027下半年 ‧ 期待與您分享幸福<br>
         ❤️ 執子之手，與子偕老 ❤️
     </div>
 
     <script>
         const board = document.getElementById('bingoBoard');
+        const cells = [];
+        let winningLinesCount = 0;
+        let hasWon = false;
+
+        // 生成與渲染
         let nums = [];
         for (let i = 1; i <= 75; i++) nums.push(i);
-        function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
-        const selectedNums = shuffle([...nums]).slice(0, 25);
+        const selectedNums = nums.sort(() => Math.random() - 0.5).slice(0, 25);
 
         selectedNums.forEach((num, index) => {
             const cell = document.createElement('div');
             cell.className = 'cell';
             if (index === 12) {
-                cell.innerText = "FREE";
+                cell.innerHTML = '<img src="wedding.jpg" style="width:100%; height:100%; border-radius:10px; object-fit:cover;" onerror="this.style.display=\'none\'; this.parentElement.innerText=\'FREE\'">';
                 cell.classList.add('active', 'free');
             } else {
                 cell.innerText = num;
-                cell.onclick = function() { this.classList.toggle('active'); };
+                cell.onclick = () => {
+                    cell.classList.toggle('active');
+                    checkBingo();
+                };
             }
             board.appendChild(cell);
+            cells.push(cell);
         });
+
+        function checkBingo() {
+            const winConditions = [
+                [0,1,2,3,4], [5,6,7,8,9], [10,11,12,13,14], [15,16,17,18,19], [20,21,22,23,24], // 橫
+                [0,5,10,15,20], [1,6,11,16,21], [2,7,12,17,22], [3,8,13,18,23], [4,9,14,19,24], // 豎
+                [0,6,12,18,24], [4,8,12,16,20] // 斜
+            ];
+
+            let currentLines = 0;
+            cells.forEach(c => c.classList.remove('win'));
+
+            winConditions.forEach(condition => {
+                if (condition.every(index => cells[index].classList.contains('active'))) {
+                    currentLines++;
+                    condition.forEach(index => cells[index].classList.add('win'));
+                }
+            });
+
+            if (currentLines >= 3 && !hasWon) {
+                hasWon = true;
+                document.getElementById('winMessage').style.display = 'block';
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
+        }
     </script>
 </body>
 </html>
