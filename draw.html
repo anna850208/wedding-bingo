@@ -18,7 +18,23 @@
         }
         h1 { color: #e5989b; font-size: 40px; margin-bottom: 5px; }
         
-        /* 大數字顯示區 (維持大尺寸) */
+        /* 音樂控制按鈕 */
+        .music-ctrl {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        .music-ctrl button {
+            padding: 8px 15px;
+            font-size: 14px;
+            background: white;
+            color: #e5989b;
+            border: 2px solid #e5989b;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
         #currentNum {
             font-size: 180px;
             font-weight: 900;
@@ -35,7 +51,7 @@
             margin: 20px 0;
         }
 
-        button {
+        #drawBtn {
             padding: 20px 50px;
             font-size: 28px;
             background-color: #e5989b;
@@ -47,10 +63,9 @@
             transition: 0.3s;
             margin-bottom: 30px;
         }
-        button:hover { background-color: #d4878a; transform: scale(1.05); }
-        button:disabled { background-color: #ccc; }
+        #drawBtn:hover { background-color: #d4878a; transform: scale(1.05); }
+        #drawBtn:disabled { background-color: #ccc; }
 
-        /* 重點調整：已抽過的號碼區塊 */
         .history {
             width: 95%;
             max-width: 1000px;
@@ -59,21 +74,9 @@
             padding: 20px;
             border-radius: 20px;
         }
-        .history h3 { 
-            color: #b5838d; 
-            font-size: 24px; 
-            border-bottom: 2px solid #ffeaec; 
-            padding-bottom: 10px; 
-            margin-bottom: 20px;
-        }
-        #historyList {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-        }
+        .history h3 { color: #b5838d; font-size: 24px; border-bottom: 2px solid #ffeaec; padding-bottom: 10px; margin-bottom: 20px; }
+        #historyList { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
         
-        /* 加大後的號碼球樣式 */
         .history-item {
             background: #ffb4a2;
             color: white;
@@ -83,22 +86,22 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            font-size: 28px; /* 號碼字體加大 */
+            font-size: 28px;
             font-weight: 900;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
             animation: popIn 0.3s ease-out;
         }
 
-        @keyframes popIn {
-            0% { transform: scale(0); }
-            80% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
+        @keyframes popIn { 0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
-    <h1>✨ 宜芝 & 博鈞 婚禮賓果 ✨</h1>
+    <div class="music-ctrl">
+        <button id="musicBtn" onclick="toggleMusic()">🎵 播放浪漫背景音</button>
+    </div>
+
+    <h1>✨ 婚禮賓果抽獎機 ✨</h1>
     <div id="currentNum">?</div>
     <button id="drawBtn" onclick="drawNumber()">點擊抽號碼</button>
 
@@ -107,9 +110,26 @@
         <div id="historyList"></div>
     </div>
 
+    <!-- 推薦的浪漫鋼琴音樂 (免版權音樂) -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
         let numbers = Array.from({length: 75}, (_, i) => i + 1);
         let history = [];
+
+        function toggleMusic() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicBtn.innerText = "⏸ 暫停音樂";
+            } else {
+                bgMusic.pause();
+                musicBtn.innerText = "🎵 播放音樂";
+            }
+        }
 
         function drawNumber() {
             if (numbers.length === 0) {
@@ -117,11 +137,9 @@
                 document.getElementById('drawBtn').disabled = true;
                 return;
             }
-
             const btn = document.getElementById('drawBtn');
             const display = document.getElementById('currentNum');
             btn.disabled = true;
-
             let counter = 0;
             let timer = setInterval(() => {
                 display.innerText = Math.floor(Math.random() * 75) + 1;
@@ -136,18 +154,15 @@
         function finalizeDraw() {
             const randomIndex = Math.floor(Math.random() * numbers.length);
             const picked = numbers.splice(randomIndex, 1)[0];
-            history.unshift(picked); // 新號碼排在最前面，方便看
-
+            history.unshift(picked);
             document.getElementById('currentNum').innerText = picked;
-            
-            // 更新歷史紀錄
             renderHistory();
             document.getElementById('drawBtn').disabled = false;
         }
 
         function renderHistory() {
             const list = document.getElementById('historyList');
-            list.innerHTML = ""; // 重新渲染確保新號碼在最前
+            list.innerHTML = "";
             history.forEach(num => {
                 const item = document.createElement('div');
                 item.className = 'history-item';
