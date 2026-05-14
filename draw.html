@@ -7,105 +7,102 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --primary: #e5989b; /* 妳偏好的亮點色 */
+            --primary: #e5989b;
             --secondary: #b5838d;
-            --soft-pink: #ffeaec;
-            --gold: #f4d35e;
+            --white-glass: rgba(255, 255, 255, 0.6);
         }
         
         body {
             font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
-            background: linear-gradient(-45deg, #fffafb, #ffedef, #fff5f6, #fffafb);
+            /* 模擬陽光灑落的背景：動態漸層 + 光暈 */
+            background: linear-gradient(135deg, #fffafb 0%, #ffedef 50%, #fff5f6 100%);
             background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite; /* 動態流光背景 */
+            animation: sunShine 10s ease infinite;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-height: 100vh; margin: 0; overflow-x: hidden;
+            min-height: 100vh; margin: 0; overflow: hidden;
         }
 
-        @keyframes gradientBG {
+        @keyframes sunShine {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* 公主風裝飾：頂部花卉意象 */
-        body::before {
-            content: "🌸 ✨ 🕊️ ✨ 🌸";
-            position: fixed; top: 10%; font-size: 24px; opacity: 0.4; letter-spacing: 20px;
+        /* 增加光點背景裝飾 */
+        body::after {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(circle, #fff 10%, transparent 20%);
+            background-size: 100px 100px; opacity: 0.3; pointer-events: none;
         }
 
-        .music-ctrl { position: fixed; top: 25px; right: 25px; z-index: 100; }
+        .music-ctrl { position: fixed; top: 20px; right: 20px; z-index: 100; }
         #musicBtn {
-            padding: 10px 25px; background: rgba(255, 255, 255, 0.9); color: var(--primary);
-            border: 2px solid var(--primary); border-radius: 30px; cursor: pointer;
-            font-weight: bold; box-shadow: 0 4px 15px rgba(229, 152, 155, 0.2);
+            padding: 8px 18px; background: var(--white-glass); color: var(--primary);
+            border: 1.5px solid var(--primary); border-radius: 20px; cursor: pointer;
+            backdrop-filter: blur(5px); font-size: 14px;
         }
 
         h1 {
-            color: var(--secondary); font-size: 48px; font-weight: 300;
-            margin-top: 40px; letter-spacing: 5px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            color: var(--secondary); font-size: 42px; font-weight: 300;
+            letter-spacing: 6px; margin-bottom: 20px; z-index: 10;
         }
 
-        /* 號碼顯示大球：公主珍珠感 */
+        /* 珍珠號碼球優化：增加柔和陰影與光澤 */
         #currentNum {
             font-size: 200px; font-weight: 900; color: var(--secondary);
-            background: radial-gradient(circle at 30% 30%, #ffffff, #fff5f6);
+            background: radial-gradient(circle at 35% 35%, #ffffff, #fffcfc);
             width: 320px; height: 320px;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; border: 15px solid white;
-            box-shadow: 0 30px 60px rgba(229, 152, 155, 0.2), inset 0 0 30px rgba(255,255,255,1);
-            margin: 40px 0; position: relative;
+            border-radius: 50%; border: 10px solid white;
+            box-shadow: 0 30px 80px rgba(229, 152, 155, 0.25);
+            margin: 20px 0; z-index: 10; position: relative;
         }
-
-        /* 閃爍亮點特效 */
-        #currentNum::after {
-            content: "✨"; position: absolute; top: 10%; right: 10%; font-size: 40px;
-            animation: sparkle 2s infinite;
-        }
-        @keyframes sparkle { 0%, 100% { opacity: 0; } 50% { opacity: 1; transform: scale(1.2); } }
 
         #drawBtn {
-            padding: 22px 100px; font-size: 32px; background: var(--primary);
-            color: white; border: none; border-radius: 60px; cursor: pointer;
-            box-shadow: 0 10px 30px rgba(229, 152, 155, 0.4);
-            font-weight: bold; transition: 0.4s;
+            padding: 20px 90px; font-size: 30px; background: var(--primary);
+            color: white; border: none; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 10px 25px rgba(229, 152, 155, 0.4);
+            font-weight: bold; transition: 0.3s; z-index: 10;
         }
-        #drawBtn:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(229, 152, 155, 0.5); }
-        #drawBtn:disabled { background: #e0e0e0; box-shadow: none; }
+        #drawBtn:hover { transform: scale(1.05); background: #d4878a; }
 
+        /* 重新設計歷史紀錄區：呈現一體感 */
         .history {
-            width: 90%; max-width: 1100px; margin-top: 60px; text-align: center;
-            background: rgba(255, 255, 255, 0.4); padding: 35px; border-radius: 40px;
-            backdrop-filter: blur(10px); border: 2px solid white;
+            width: 100%; position: absolute; bottom: 0;
+            background: linear-gradient(transparent, rgba(255, 255, 255, 0.8));
+            padding: 40px 0 30px 0; text-align: center; backdrop-filter: blur(8px);
         }
-        .history h3 { color: var(--secondary); margin-bottom: 25px; font-weight: 300; }
+        .history h3 { color: var(--secondary); font-size: 20px; font-weight: 300; margin-bottom: 15px; }
+        #historyList { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding: 0 20px; }
+        
         .history-item {
-            background: white; color: var(--primary); width: 65px; height: 65px;
-            display: inline-flex; align-items: center; justify-content: center;
-            border-radius: 50%; font-size: 28px; font-weight: bold; margin: 10px;
-            box-shadow: 0 5px 15px rgba(229, 152, 155, 0.1); border: 1px solid var(--soft-pink);
+            background: rgba(255, 255, 255, 0.9); color: var(--primary);
+            width: 55px; height: 55px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; font-size: 24px; font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--soft-pink);
+            animation: fadeInUp 0.5s ease;
         }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 動態滾動效果 */
-        .rolling { animation: shake 0.1s infinite; opacity: 0.8; }
-        @keyframes shake { 0% { transform: scale(1.02); } 50% { transform: scale(0.98); } 100% { transform: scale(1.02); } }
-        .pop { animation: popWinner 0.6s cubic-bezier(0.17, 0.89, 0.32, 1.49); }
-        @keyframes popWinner { 0% { transform: scale(0.5); } 100% { transform: scale(1); } }
+        /* 動態效果 */
+        .rolling { animation: float 0.1s infinite; }
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0); } }
+        .pop { animation: popResult 0.6s cubic-bezier(0.17, 0.89, 0.32, 1.49); }
+        @keyframes popResult { 0% { transform: scale(0.5); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
-    <div class="music-ctrl"><button id="musicBtn" onclick="toggleMusic()">🎵 播放浪漫背景音樂</button></div>
+    <div class="music-ctrl"><button id="musicBtn" onclick="toggleMusic()">🎵 播放背景音樂</button></div>
 
     <h1>✨ 宜芝 ＆ 博鈞 ✨</h1>
     
     <div id="currentNum">?</div>
     
-    <button id="drawBtn" onclick="drawNumber()">抽出幸運兒</button>
+    <button id="drawBtn" onclick="drawNumber()">抽出幸運號碼</button>
 
     <div class="history">
-        <h3>已揭曉的幸運號碼</h3>
+        <h3>已揭曉號碼</h3>
         <div id="historyList"></div>
     </div>
 
@@ -141,16 +138,13 @@
                     display.classList.remove('rolling');
                     display.classList.add('pop');
                     
-                    // 彩帶噴發：特別加入金粉色調
                     confetti({
-                        particleCount: 180,
-                        spread: 80,
-                        origin: { y: 0.6 },
-                        colors: ['#e5989b', '#f4d35e', '#ffffff', '#ffb4a2']
+                        particleCount: 150, spread: 70, origin: { y: 0.6 },
+                        colors: ['#e5989b', '#f4d35e', '#ffffff']
                     });
 
                     history.unshift(picked);
-                    setTimeout(() => { renderHistory(); drawBtn.disabled = false; }, 600);
+                    setTimeout(() => { renderHistory(); drawBtn.disabled = false; }, 500);
                 }
             }, 60);
         }
