@@ -11,82 +11,88 @@
         
         body {
             font-family: 'Noto Serif TC', serif;
-            /* 恢復陽光灑落背景 */
-            background: radial-gradient(circle at 50% 30%, #ffffff 0%, #fffbfb 100%);
+            background: radial-gradient(circle at 50% 35%, #ffffff 0%, #fffbfb 100%);
             display: flex; flex-direction: column; align-items: center; 
-            justify-content: space-around; height: 100vh; margin: 0; padding: 40px 0; box-sizing: border-box; overflow: hidden;
+            justify-content: space-between; height: 100vh; margin: 0; padding: 30px 0; box-sizing: border-box; overflow: hidden;
             position: relative;
         }
 
-        /* 裝飾元素強勢回歸 */
-        .decoration { position: absolute; color: var(--primary); opacity: 0.12; font-size: 220px; z-index: 0; pointer-events: none; }
-        .top-left { top: -40px; left: -40px; transform: rotate(-15deg); }
-        .bottom-right { bottom: -40px; right: -40px; transform: rotate(165deg); }
+        /* 裝飾背景 */
+        .decoration { position: absolute; color: var(--primary); opacity: 0.12; font-size: 240px; z-index: 0; pointer-events: none; }
+        .top-left { top: -60px; left: -60px; transform: rotate(-15deg); }
+        .bottom-right { bottom: -60px; right: -60px; transform: rotate(165deg); }
 
         .music-ctrl { position: fixed; top: 25px; right: 25px; z-index: 100; }
         #musicBtn { 
-            padding: 10px 22px; background: white; color: var(--secondary); border: 1px solid var(--accent); 
-            border-radius: 40px; cursor: pointer; font-family: 'Dancing Script', cursive; font-size: 18px;
+            padding: 10px 24px; background: white; color: var(--secondary); border: 1.5px solid var(--accent); 
+            border-radius: 40px; cursor: pointer; font-family: 'Dancing Script', cursive; font-size: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
         }
 
-        /* 頂部：Lucky Moments */
-        .history-section { width: 100%; text-align: center; margin-top: 30px; z-index: 10; }
+        /* 頂部：Lucky Moments (間距拉開) */
+        .history-section { width: 100%; text-align: center; margin-top: 40px; z-index: 10; }
         .history-section h3 { 
             font-family: 'Dancing Script', cursive; color: var(--secondary); 
-            font-size: 36px; margin: 0 0 15px 0;
+            font-size: 40px; margin: 0 0 20px 0;
         }
-        #historyList { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-height: 100px; padding: 0 12%; }
+        #historyList { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-height: 100px; padding: 0 15%; }
         .history-item {
-            background: white; color: var(--primary); width: 42px; height: 42px;
+            background: white; color: var(--primary); width: 44px; height: 44px;
             display: flex; align-items: center; justify-content: center;
             border-radius: 50%; font-size: 20px; font-weight: bold; 
-            box-shadow: 0 4px 10px rgba(229, 152, 155, 0.15); border: 1px solid #fdf0f1;
+            box-shadow: 0 4px 12px rgba(229, 152, 155, 0.15); border: 1px solid #fdf0f1;
         }
 
-        /* 中間：名字與質感 Slogan */
-        .mid-stage { display: flex; flex-direction: column; align-items: center; z-index: 10; width: 100%; position: relative; }
+        /* 中間舞台：照片與內容 */
+        .mid-stage { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; width: 100%; position: relative; }
         
+        /* 照片預留區：大幅放大 */
+        .photo-container {
+            position: absolute; width: 100%; top: 50%; transform: translateY(-50%);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 3%; pointer-events: none; z-index: 5;
+        }
+        .photo-box { 
+            width: 280px; height: 420px; /* 從 180x260 大幅增加 */
+            border: 1px dashed var(--accent); border-radius: 15px; 
+            background: rgba(255,255,255,0.4); backdrop-filter: blur(2px);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--secondary); font-size: 14px; text-align: center;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.05);
+        }
+
         .chi-name { 
-            font-size: 46px; color: var(--secondary); font-weight: 700;
-            letter-spacing: 12px; margin-bottom: 12px;
+            font-size: 42px; color: var(--secondary); font-weight: 700;
+            letter-spacing: 12px; margin-bottom: 15px;
         }
 
         .wedding-slogan { 
-            font-size: 20px; font-weight: 300; letter-spacing: 10px; padding: 10px 50px;
-            background: linear-gradient(to right, transparent, rgba(255,180,162,0.15), transparent);
+            font-size: 18px; font-weight: 300; letter-spacing: 12px; padding: 12px 60px;
+            background: linear-gradient(to right, transparent, rgba(255,180,162,0.18), transparent);
             border-top: 1px solid var(--accent); border-bottom: 1px solid var(--accent);
-            color: var(--gold); margin-bottom: 35px;
+            color: var(--gold); margin-bottom: 45px;
         }
 
         #currentNum {
-            font-size: 130px; font-weight: 900; color: var(--secondary);
-            background: white; width: 250px; height: 250px;
+            font-size: 120px; font-weight: 900; color: var(--secondary);
+            background: white; width: 230px; height: 230px;
             display: flex; align-items: center; justify-content: center;
             border-radius: 50%; border: 12px solid white;
-            box-shadow: 0 20px 60px rgba(181, 131, 141, 0.1);
+            box-shadow: 0 20px 70px rgba(181, 131, 141, 0.1);
         }
 
-        /* 照片預留區 */
-        .photo-container {
-            position: absolute; width: 100%; height: 100%; top: 0; left: 0;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 5%; pointer-events: none; z-index: 5;
-        }
-        .photo-box { width: 180px; height: 260px; border: 1px dashed var(--accent); border-radius: 12px; opacity: 0.4; background: rgba(255,255,255,0.3); }
-
-        /* 底部抽獎按鈕 */
-        .bottom-stage { margin-bottom: 15px; z-index: 10; }
+        /* 底部：抽獎按鈕 */
+        .bottom-stage { margin-bottom: 30px; z-index: 10; }
         #drawBtn {
-            padding: 16px 85px; font-size: 26px; background: var(--primary);
-            color: white; border: none; border-radius: 50px; cursor: pointer;
-            box-shadow: 0 10px 30px rgba(229, 152, 155, 0.3);
-            font-weight: 700; letter-spacing: 4px; transition: 0.3s;
+            padding: 16px 90px; font-size: 28px; background: var(--primary);
+            color: white; border: none; border-radius: 60px; cursor: pointer;
+            box-shadow: 0 12px 35px rgba(229, 152, 155, 0.35);
+            font-weight: 700; letter-spacing: 6px; transition: 0.3s;
         }
-        #drawBtn:hover { transform: scale(1.05); }
+        #drawBtn:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(229, 152, 155, 0.45); }
     </style>
 </head>
 <body>
-    <!-- 補回花卉裝飾 -->
     <div class="decoration top-left">✿</div>
     <div class="decoration bottom-right">✿</div>
 
@@ -98,10 +104,9 @@
     </div>
 
     <div class="mid-stage">
-        <!-- 照片預留區位子更正 -->
         <div class="photo-container">
-            <div class="photo-box" id="groomBox"></div>
-            <div class="photo-box" id="brideBox"></div>
+            <div class="photo-box" id="groomBox">新郎照片預留區<br>(280 x 420)</div>
+            <div class="photo-box" id="brideBox">新娘照片預留區<br>(280 x 420)</div>
         </div>
 
         <span class="chi-name">博鈞 ＆ 宜芝</span>
@@ -134,18 +139,15 @@
             let timer = setInterval(() => {
                 display.innerText = Math.floor(Math.random() * 75) + 1;
                 count++;
-                if (count > 20) {
+                if (count > 22) {
                     clearInterval(timer);
                     const idx = Math.floor(Math.random() * numbers.length);
                     const picked = numbers.splice(idx, 1)[0];
                     display.innerText = picked;
-                    
-                    // 繽紛慶祝彩帶
                     confetti({ 
-                        particleCount: 220, spread: 85, origin: { y: 0.65 }, 
+                        particleCount: 250, spread: 90, origin: { y: 0.65 }, 
                         colors: ['#ff0000', '#ffd700', '#ff69b4', '#00ff00', '#00e5ff', '#ffffff'] 
                     });
-
                     history.unshift(picked);
                     renderHistory();
                     drawBtn.disabled = false;
