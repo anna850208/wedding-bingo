@@ -27,71 +27,67 @@
             border-radius: 40px; cursor: pointer; font-family: 'Dancing Script', cursive; font-size: 18px;
         }
 
-        /* 頂部區域：號碼球區 */
-        .history-section { width: 100%; text-align: center; padding-top: 15px; z-index: 20; min-height: 150px; }
-        .history-section h3 { 
-            font-family: 'Dancing Script', cursive; color: var(--secondary); 
-            font-size: 36px; margin: 0 0 8px 0;
-        }
+        /* 歷史號碼球區域 */
+        .history-section { width: 100%; text-align: center; padding-top: 15px; z-index: 20; min-height: 130px; }
+        .history-section h3 { font-family: 'Dancing Script', cursive; color: var(--secondary); font-size: 34px; margin: 0 0 8px 0; }
         #historyList { 
             display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; 
-            max-height: 140px; padding: 0 18%; /* 寬度稍微收窄，讓位給大照片 */
+            max-height: 120px; padding: 0 25%; /* 讓號碼更集中在中央 */
             overflow-y: visible;
         }
         .history-item {
-            background: white; color: var(--primary); width: 36px; height: 36px;
+            background: white; color: var(--primary); width: 34px; height: 34px;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; font-size: 17px; font-weight: bold; 
+            border-radius: 50%; font-size: 16px; font-weight: bold; 
             box-shadow: 0 4px 10px rgba(229, 152, 155, 0.12); border: 1px solid #fdf0f1;
-            position: relative; z-index: 21;
         }
 
-        /* 中間舞台：設為底層 */
-        .mid-stage { flex: 1; display: flex; flex-direction: column; align-items: center; z-index: 1; width: 100%; position: relative; padding-top: 10px; }
+        /* 主舞台區 */
+        .mid-stage { flex: 1; display: flex; flex-direction: column; align-items: center; z-index: 1; width: 100%; position: relative; padding-top: 5px; }
         
-        /* 照片區：再次放大寬高，並微調位置 */
+        /* 照片容器：增加間距 */
         .photo-container {
             position: absolute; 
-            width: 94%; /* 寬度佔比 */
-            top: 75px; /* 對齊 Slogan */
-            display: flex; justify-content: space-around; /* 讓照片更往中間靠一點點 */
+            width: 96%; /* 讓容器寬一點 */
+            top: 75px; 
+            display: flex; 
+            justify-content: space-between; /* 徹底推向兩邊 */
+            padding: 0 20px; /* 與螢幕邊緣留一點點空隙 */
             pointer-events: none; z-index: 5;
         }
         .photo-box { 
-            width: 340px; height: 510px; /* 大幅增加比例 */
+            width: 330px; height: 495px; /* 稍微微調大小以符合比例 */
             border: 1px dashed var(--accent); border-radius: 15px; 
-            background: rgba(255,255,255,0.3); backdrop-filter: blur(2px);
+            background: rgba(255,255,255,0.2); backdrop-filter: blur(2px);
             display: flex; align-items: center; justify-content: center;
             color: var(--secondary); font-size: 16px; text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.04);
         }
 
         .chi-name { 
-            font-size: 48px; color: var(--secondary); font-weight: 700;
-            letter-spacing: 12px; margin-bottom: 10px; margin-top: 10px;
-            z-index: 1;
+            font-size: 44px; color: var(--secondary); font-weight: 700;
+            letter-spacing: 12px; margin-bottom: 8px; margin-top: 10px;
         }
 
         .wedding-slogan { 
-            font-size: 20px; font-weight: 300; letter-spacing: 10px; padding: 10px 50px;
+            font-size: 18px; font-weight: 300; letter-spacing: 10px; padding: 8px 40px;
             border-top: 1px solid var(--accent); border-bottom: 1px solid var(--accent);
             color: var(--gold); margin-bottom: 30px;
-            z-index: 1;
         }
 
+        /* 縮小抽獎球尺寸，換取間距 */
         #currentNum {
-            font-size: 140px; font-weight: 900; color: var(--secondary);
-            background: white; width: 260px; height: 260px;
+            font-size: 110px; font-weight: 900; color: var(--secondary);
+            background: white; width: 210px; height: 210px;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; border: 12px solid white;
-            box-shadow: 0 20px 70px rgba(181, 131, 141, 0.12);
+            border-radius: 50%; border: 10px solid white;
+            box-shadow: 0 15px 50px rgba(181, 131, 141, 0.1);
             z-index: 10;
         }
 
-        /* 底部 */
-        .bottom-stage { padding-bottom: 35px; z-index: 20; }
+        .bottom-stage { padding-bottom: 40px; z-index: 20; }
         #drawBtn {
-            padding: 18px 100px; font-size: 28px; background: var(--primary);
+            padding: 16px 90px; font-size: 24px; background: var(--primary);
             color: white; border: none; border-radius: 60px; cursor: pointer;
             box-shadow: 0 10px 30px rgba(229, 152, 155, 0.3);
             font-weight: 700; letter-spacing: 4px;
@@ -111,8 +107,9 @@
 
     <div class="mid-stage">
         <div class="photo-container">
-            <div class="photo-box" id="groomBox">新郎婚紗照<br>(340 x 510)</div>
-            <div class="photo-box" id="brideBox">新娘婚紗照<br>(340 x 510)</div>
+            <!-- 照片現在分開得很漂亮 -->
+            <div class="photo-box" id="groomBox">新郎婚紗照</div>
+            <div class="photo-box" id="brideBox">新娘婚紗照</div>
         </div>
 
         <span class="chi-name">博鈞 ＆ 宜芝</span>
