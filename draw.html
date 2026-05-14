@@ -4,72 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>博鈞 & 宜芝 婚禮抽獎機</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --primary: #e5989b; --secondary: #b5838d; --accent: #ffb4a2; }
+        :root { --primary: #e5989b; --secondary: #b5838d; --accent: #ffb4a2; --gold: #d4af37; }
         
         body {
             font-family: 'Noto Serif TC', serif;
-            background: linear-gradient(135deg, #fffafb 0%, #ffedef 100%);
+            /* 恢復陽光灑落的清新背景 */
+            background: radial-gradient(circle at 50% 30%, #ffffff 0%, #fff0f3 60%, #ffedef 100%);
             display: flex; flex-direction: column; align-items: center; 
-            justify-content: space-between; /* 均勻分配頂、中、底空間 */
-            height: 100vh; margin: 0; padding: 40px 0; box-sizing: border-box; overflow: hidden;
+            justify-content: space-between;
+            height: 100vh; margin: 0; padding: 30px 0; box-sizing: border-box; overflow: hidden;
+            position: relative;
         }
 
-        /* 音樂按鈕 */
-        .music-ctrl { position: fixed; top: 20px; right: 20px; z-index: 100; }
+        /* 裝飾元素回歸：大型浮水印花卉 */
+        .decoration { position: absolute; color: var(--primary); opacity: 0.12; font-size: 200px; z-index: 0; pointer-events: none; }
+        .top-left { top: -40px; left: -40px; transform: rotate(-15deg); }
+        .bottom-right { bottom: -40px; right: -40px; transform: rotate(165deg); }
+
+        /* 右上角音樂按鈕 */
+        .music-ctrl { position: fixed; top: 25px; right: 25px; z-index: 100; }
         #musicBtn { 
             padding: 10px 25px; background: white; color: var(--primary); 
-            border: 1px solid var(--primary); border-radius: 40px; cursor: pointer; 
-            font-family: 'Dancing Script', cursive; font-size: 18px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 2px solid var(--primary); border-radius: 40px; cursor: pointer; 
+            font-family: 'Dancing Script', cursive; font-size: 20px; font-weight: bold;
+            box-shadow: 0 4px 15px rgba(229, 152, 155, 0.2);
         }
 
-        /* 頂部：歷史紀錄 */
-        .top-container { width: 100%; text-align: center; flex: 0 0 auto; }
+        /* 頂部：Lucky Moments */
+        .top-container { width: 100%; text-align: center; z-index: 10; }
         .top-container h3 { 
             font-family: 'Dancing Script', cursive; color: var(--secondary); 
-            font-size: 32px; margin: 0 0 10px 0; 
+            font-size: 42px; margin: 0 0 10px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
         }
-        #historyList { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-height: 80px; overflow: hidden; }
+        #historyList { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
         .history-item {
-            background: white; color: var(--primary); width: 40px; height: 40px;
+            background: white; color: var(--primary); width: 45px; height: 45px;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; font-size: 18px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 50%; font-size: 20px; font-weight: bold; 
+            box-shadow: 0 4px 10px rgba(229, 152, 155, 0.15);
+            border: 1px solid var(--accent);
         }
 
-        /* 中間：名字與號碼球 */
-        .mid-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+        /* 中間：名字與大型號碼球 */
+        .mid-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
         .chi-name { 
-            font-size: 56px; color: var(--secondary); font-weight: 700;
-            letter-spacing: 15px; margin-bottom: 10px;
+            font-size: 64px; color: var(--secondary); font-weight: 700;
+            letter-spacing: 20px; margin-bottom: 10px;
         }
         .wedding-slogan { 
-            font-size: 24px; color: var(--secondary); font-weight: 300;
-            letter-spacing: 6px; padding: 5px 30px; border-top: 1px solid var(--accent); border-bottom: 1px solid var(--accent);
-            margin-bottom: 30px;
+            font-size: 28px; color: var(--secondary); font-weight: 300;
+            letter-spacing: 10px; padding: 10px 40px; border-top: 1.5px solid var(--accent); border-bottom: 1.5px solid var(--accent);
+            margin-bottom: 40px;
         }
 
         #currentNum {
-            font-size: 160px; font-weight: 900; color: var(--secondary);
-            background: white; width: 280px; height: 280px;
+            font-size: 200px; font-weight: 900; color: var(--secondary);
+            background: white; width: 340px; height: 340px;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; border: 15px solid white;
-            box-shadow: 0 20px 60px rgba(229, 152, 155, 0.2);
+            border-radius: 50%; border: 18px solid white;
+            box-shadow: 0 30px 80px rgba(229, 152, 155, 0.25);
         }
 
-        /* 底部：按鈕 */
-        .bottom-container { flex: 0 0 auto; width: 100%; text-align: center; }
+        /* 底部：抽獎按鈕 */
+        .bottom-container { z-index: 10; margin-bottom: 20px; }
         #drawBtn {
-            padding: 18px 100px; font-size: 28px; background: var(--primary);
-            color: white; border: none; border-radius: 50px; cursor: pointer;
-            box-shadow: 0 10px 30px rgba(229, 152, 155, 0.3);
-            font-weight: 700; letter-spacing: 4px;
+            padding: 20px 120px; font-size: 32px; background: var(--primary);
+            color: white; border: none; border-radius: 60px; cursor: pointer;
+            box-shadow: 0 15px 40px rgba(229, 152, 155, 0.4);
+            font-weight: 700; letter-spacing: 6px; transition: 0.3s;
         }
+        #drawBtn:hover { transform: scale(1.05); background: #d4878a; }
+        #drawBtn:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
+    <!-- 找回來的裝飾元素 -->
+    <div class="decoration top-left">✿</div>
+    <div class="decoration bottom-right">✿</div>
+
     <div class="music-ctrl"><button id="musicBtn" onclick="toggleMusic()">🎵 Wedding Day</button></div>
 
     <div class="top-container">
@@ -108,12 +123,22 @@
             let timer = setInterval(() => {
                 display.innerText = Math.floor(Math.random() * 75) + 1;
                 count++;
-                if (count > 20) {
+                if (count > 22) {
                     clearInterval(timer);
                     const idx = Math.floor(Math.random() * numbers.length);
                     const picked = numbers.splice(idx, 1)[0];
                     display.innerText = picked;
-                    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#e5989b', '#ffb4a2', '#ffffff'] });
+                    
+                    // 升級版：更鮮艷、繽紛的彩帶顏色
+                    confetti({ 
+                        particleCount: 250, 
+                        spread: 100, 
+                        origin: { y: 0.6 }, 
+                        colors: ['#ff0000', '#ffd700', '#ff69b4', '#00ff00', '#00e5ff', '#ffffff', '#e5989b'],
+                        ticks: 300,
+                        gravity: 0.8
+                    });
+
                     history.unshift(picked);
                     renderHistory();
                     drawBtn.disabled = false;
