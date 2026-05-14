@@ -5,37 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>宜芝 & 博鈞 婚禮抽獎機</title>
     <style>
-        body { font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; background-color: #fffafb; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; }
+        body { font-family: "PingFang TC", sans-serif; background-color: #fffafb; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; }
         h1 { color: #e5989b; font-size: 40px; margin-bottom: 5px; }
         .music-ctrl { position: fixed; top: 25px; right: 25px; z-index: 100; }
-        #musicBtn { padding: 12px 20px; font-size: 16px; background: #fff; color: #e5989b; border: 2px solid #e5989b; border-radius: 30px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(229,152,155,0.2); transition: 0.3s; }
-        #musicBtn:hover { background: #ffeaec; }
+        #musicBtn { padding: 12px 20px; font-size: 16px; background: #fff; color: #e5989b; border: 2px solid #e5989b; border-radius: 30px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(229,152,155,0.2); }
         #currentNum { font-size: 180px; font-weight: 900; color: #b5838d; background: white; width: 300px; height: 300px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 10px 40px rgba(229, 152, 155, 0.2); border: 10px solid #ffeaec; margin: 20px 0; }
         #drawBtn { padding: 20px 60px; font-size: 30px; background-color: #e5989b; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 6px 20px rgba(229, 152, 155, 0.4); margin-bottom: 35px; }
         .history { width: 95%; max-width: 1000px; text-align: center; background: rgba(255, 255, 255, 0.6); padding: 25px; border-radius: 25px; }
-        .history h3 { color: #b5838d; font-size: 26px; border-bottom: 2px solid #ffeaec; padding-bottom: 12px; margin-bottom: 25px; }
-        #historyList { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
-        .history-item { background: #ffb4a2; color: white; width: 65px; height: 65px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 30px; font-weight: 900; box-shadow: 2px 4px 8px rgba(0,0,0,0.1); }
+        .history-item { background: #ffb4a2; color: white; width: 65px; height: 65px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 30px; font-weight: 900; margin: 5px; display: inline-flex; }
     </style>
 </head>
 <body>
-
     <div class="music-ctrl">
-        <button id="musicBtn" onclick="toggleMusic()">🎵 播放 Wedding Plans 音樂</button>
+        <button id="musicBtn" onclick="toggleMusic()">🎵 點擊播放音樂</button>
     </div>
-
     <h1>✨ 宜芝 & 博鈞 婚禮抽獎機 ✨</h1>
     <div id="currentNum">?</div>
     <button id="drawBtn" onclick="drawNumber()">開始抽號碼</button>
-
     <div class="history">
-        <h3>已抽出的號碼 (最新在最前)</h3>
+        <h3>已抽出的號碼</h3>
         <div id="historyList"></div>
     </div>
 
-    <!-- 已更換為輕快活潑的 Wedding 風格音樂連結 -->
-    <audio id="bgMusic" loop preload="auto" crossorigin="anonymous">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+    <!-- 音樂檔直接讀取妳 GitHub 裡的檔案 -->
+    <audio id="bgMusic" loop>
+        <source src="bgm.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -44,19 +38,10 @@
         let numbers = Array.from({length: 75}, (_, i) => i + 1);
         let history = [];
 
-        // 設定合適的背景音量
-        bgMusic.volume = 0.5;
-
         function toggleMusic() {
             if (bgMusic.paused) {
-                bgMusic.play().then(() => {
-                    musicBtn.innerText = "⏸ 暫停音樂";
-                }).catch(e => {
-                    console.error("播放受阻：", e);
-                    // 如果被瀏覽器阻擋，再次嘗試
-                    bgMusic.load();
-                    bgMusic.play();
-                });
+                bgMusic.play();
+                musicBtn.innerText = "⏸ 暫停音樂";
             } else {
                 bgMusic.pause();
                 musicBtn.innerText = "🎵 播放音樂";
@@ -64,33 +49,24 @@
         }
 
         function drawNumber() {
-            if (numbers.length === 0) {
-                alert("所有號碼都抽完囉！");
-                return;
-            }
+            if (numbers.length === 0) return;
             const btn = document.getElementById('drawBtn');
             const display = document.getElementById('currentNum');
             btn.disabled = true;
-
-            // 抽獎跳動動畫
             let counter = 0;
             let timer = setInterval(() => {
                 display.innerText = Math.floor(Math.random() * 75) + 1;
                 counter++;
                 if (counter > 15) {
                     clearInterval(timer);
-                    finalizeDraw();
+                    const randomIndex = Math.floor(Math.random() * numbers.length);
+                    const picked = numbers.splice(randomIndex, 1)[0];
+                    history.unshift(picked);
+                    display.innerText = picked;
+                    renderHistory();
+                    btn.disabled = false;
                 }
             }, 60);
-        }
-
-        function finalizeDraw() {
-            const randomIndex = Math.floor(Math.random() * numbers.length);
-            const picked = numbers.splice(randomIndex, 1)[0];
-            history.unshift(picked);
-            document.getElementById('currentNum').innerText = picked;
-            renderHistory();
-            document.getElementById('drawBtn').disabled = false;
         }
 
         function renderHistory() {
