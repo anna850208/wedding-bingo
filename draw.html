@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --primary: #e5989b; --secondary: #b5838d; --accent: #ffb4a2; --gold: #c5a059; --gold-light: #e9d5a3; }
+        :root { --primary: #e5989b; --secondary: #b5838d; --accent: #ffb4a2; --gold: #b08d57; --gold-deep: #8e6d3d; }
         
         body {
             font-family: 'Noto Serif TC', serif;
@@ -27,14 +27,14 @@
             border-radius: 40px; cursor: pointer; font-family: 'Dancing Script', cursive; font-size: 18px;
         }
 
-        .history-section { width: 100%; text-align: center; padding-top: 15px; z-index: 20; display: flex; flex-direction: column; align-items: center; }
+        /* 號碼牆：直接顯示，不隱藏滾動 */
+        .history-section { width: 100%; text-align: center; padding-top: 15px; z-index: 20; min-height: 140px; }
         .history-section h3 { font-family: 'Dancing Script', cursive; color: var(--secondary); font-size: 34px; margin: 0 0 5px 0; }
         
         #historyList { 
             display: grid; grid-template-columns: repeat(15, 34px); justify-content: center; gap: 6px; 
-            max-height: 120px; overflow-y: auto; padding: 5px; scrollbar-width: none;
+            padding: 5px;
         }
-        #historyList::-webkit-scrollbar { display: none; }
 
         .history-item {
             background: white; color: var(--primary); width: 34px; height: 34px;
@@ -43,9 +43,9 @@
             box-shadow: 0 4px 10px rgba(229, 152, 155, 0.12); border: 1px solid #fdf0f1;
         }
 
-        .mid-stage { flex: 1; display: flex; flex-direction: column; align-items: center; z-index: 1; width: 100%; position: relative; padding-top: 20px; }
+        .mid-stage { flex: 1; display: flex; flex-direction: column; align-items: center; z-index: 1; width: 100%; position: relative; padding-top: 40px; }
         
-        .photo-container { position: absolute; width: 1200px; top: 55px; display: flex; justify-content: space-between; pointer-events: none; z-index: 5; }
+        .photo-container { position: absolute; width: 1200px; top: 75px; display: flex; justify-content: space-between; pointer-events: none; z-index: 5; }
         .photo-box { 
             width: 320px; height: 480px; border: 1px dashed var(--accent); border-radius: 15px; 
             background: rgba(255,255,255,0.2); backdrop-filter: blur(2px);
@@ -56,33 +56,27 @@
 
         .chi-name { 
             font-size: 44px; color: var(--secondary); font-weight: 700;
-            letter-spacing: 12px; margin-bottom: 12px; margin-top: 10px;
+            letter-spacing: 12px; margin-bottom: 15px;
         }
 
-        /* ✨ 質感升級：燙金質感與呼吸光暈 */
+        /* ✨ 強化顯眼度：深玫瑰金漸層 + 文字陰影 */
         .wedding-slogan { 
-            font-size: 20px; font-weight: 600; letter-spacing: 12px;
-            padding: 10px 50px;
-            background: linear-gradient(to right, var(--gold), var(--gold-light), var(--gold));
+            font-size: 20px; font-weight: 700; letter-spacing: 10px;
+            padding: 12px 50px;
+            background: linear-gradient(135deg, var(--gold-deep) 0%, var(--gold) 50%, var(--gold-deep) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0px 2px 3px rgba(0,0,0,0.05); /* 輕微陰影增加立體感 */
             position: relative;
-            margin-bottom: 30px;
-            animation: goldGlow 3s ease-in-out infinite;
+            margin-bottom: 35px;
         }
 
-        /* 裝飾線條優化 */
         .wedding-slogan::before, .wedding-slogan::after {
-            content: ""; position: absolute; left: 10%; right: 10%;
-            height: 1px; background: linear-gradient(to right, transparent, var(--gold-light), transparent);
+            content: ""; position: absolute; left: 5%; right: 5%;
+            height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent);
         }
         .wedding-slogan::before { top: 0; }
         .wedding-slogan::after { bottom: 0; }
-
-        @keyframes goldGlow {
-            0%, 100% { filter: drop-shadow(0 0 1px rgba(197, 160, 89, 0.2)); transform: scale(1); }
-            50% { filter: drop-shadow(0 0 8px rgba(233, 213, 163, 0.6)); transform: scale(1.02); }
-        }
 
         #currentNum {
             font-size: 110px; font-weight: 900; color: var(--secondary);
@@ -93,7 +87,7 @@
             z-index: 10;
         }
 
-        .bottom-stage { padding-bottom: 40px; z-index: 20; }
+        .bottom-stage { padding-bottom: 50px; z-index: 20; }
         #drawBtn {
             padding: 16px 90px; font-size: 24px; background: var(--primary);
             color: white; border: none; border-radius: 60px; cursor: pointer;
@@ -120,7 +114,6 @@
         </div>
 
         <span class="chi-name">博鈞 ＆ 宜芝</span>
-        <!-- 此處應用了新的燙金質感特效 -->
         <div class="wedding-slogan">博得此生，宜然相守</div>
         <div id="currentNum">?</div>
     </div>
@@ -172,7 +165,6 @@
                 item.innerText = num;
                 list.appendChild(item);
             });
-            list.scrollTop = list.scrollHeight;
         }
     </script>
 </body>
