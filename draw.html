@@ -5,101 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>宜芝 & 博鈞 婚禮抽獎機</title>
     <style>
-        body {
-            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
-            background-color: #fffafb;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
+        body { font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; background-color: #fffafb; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; }
         h1 { color: #e5989b; font-size: 40px; margin-bottom: 5px; }
-        
-        .music-ctrl {
-            position: fixed;
-            top: 25px;
-            right: 25px;
-            z-index: 100;
-        }
-        #musicBtn {
-            padding: 12px 20px;
-            font-size: 16px;
-            background: #fff;
-            color: #e5989b;
-            border: 2px solid #e5989b;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(229, 152, 155, 0.2);
-            font-weight: bold;
-        }
-
-        #currentNum {
-            font-size: 180px;
-            font-weight: 900;
-            color: #b5838d;
-            background: white;
-            width: 300px;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            box-shadow: 0 10px 40px rgba(229, 152, 155, 0.2);
-            border: 10px solid #ffeaec;
-            margin: 20px 0;
-        }
-
-        #drawBtn {
-            padding: 20px 60px;
-            font-size: 30px;
-            background-color: #e5989b;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(229, 152, 155, 0.4);
-            transition: 0.3s;
-            margin-bottom: 35px;
-        }
+        .music-ctrl { position: fixed; top: 25px; right: 25px; z-index: 100; }
+        #musicBtn { padding: 12px 20px; font-size: 16px; background: #fff; color: #e5989b; border: 2px solid #e5989b; border-radius: 30px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(229,152,155,0.2); }
+        #currentNum { font-size: 180px; font-weight: 900; color: #b5838d; background: white; width: 300px; height: 300px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 10px 40px rgba(229,152,155,0.2); border: 10px solid #ffeaec; margin: 20px 0; }
+        #drawBtn { padding: 20px 60px; font-size: 30px; background-color: #e5989b; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 6px 20px rgba(229,152,155,0.4); margin-bottom: 35px; transition: 0.3s; }
         #drawBtn:hover { background-color: #d4878a; transform: scale(1.05); }
         #drawBtn:disabled { background-color: #ccc; cursor: not-allowed; }
-
-        .history {
-            width: 95%;
-            max-width: 1000px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 25px;
-            border-radius: 25px;
-            border: 1px solid #ffeaec;
-        }
+        .history { width: 95%; max-width: 1000px; text-align: center; background: rgba(255,255,255,0.6); padding: 25px; border-radius: 25px; border: 1px solid #ffeaec; }
         .history h3 { color: #b5838d; font-size: 26px; border-bottom: 2px solid #ffeaec; padding-bottom: 12px; margin-bottom: 25px; }
         #historyList { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
-        
-        .history-item {
-            background: #ffb4a2;
-            color: white;
-            width: 65px;
-            height: 65px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            font-size: 30px;
-            font-weight: 900;
-            box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        .history-item { background: #ffb4a2; color: white; width: 65px; height: 65px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 30px; font-weight: 900; box-shadow: 2px 4px 8px rgba(0,0,0,0.1); animation: popIn 0.4s ease-out; }
         @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
     <div class="music-ctrl">
-        <button id="musicBtn" onclick="toggleMusic()">🎵 播放 Wedding Day 音樂</button>
+        <button id="musicBtn" onclick="toggleMusic()">🎵 點擊啟動浪漫音樂</button>
     </div>
 
     <h1>✨ 宜芝 & 博鈞 婚禮抽獎機 ✨</h1>
@@ -111,7 +35,7 @@
         <div id="historyList"></div>
     </div>
 
-    <!-- 已套用 Wedding Day 的穩定音源 -->
+    <!-- 音樂元件 -->
     <audio id="bgMusic" loop preload="auto">
         <source src="https://assets.mixkit.co/music/preview/mixkit-wedding-day-533.mp3" type="audio/mpeg">
     </audio>
@@ -122,15 +46,11 @@
         let numbers = Array.from({length: 75}, (_, i) => i + 1);
         let history = [];
 
-        bgMusic.volume = 0.6;
-
+        // 簡化播放邏輯，直接執行
         function toggleMusic() {
             if (bgMusic.paused) {
-                bgMusic.play().then(() => {
-                    musicBtn.innerText = "⏸ 暫停音樂";
-                }).catch(error => {
-                    alert("請再次點擊播放音樂");
-                });
+                bgMusic.play();
+                musicBtn.innerText = "⏸ 暫停音樂";
             } else {
                 bgMusic.pause();
                 musicBtn.innerText = "🎵 播放音樂";
@@ -142,6 +62,11 @@
                 alert("號碼都抽完囉！");
                 return;
             }
+            // 點擊抽獎時也嘗試啟動音樂（確保音樂能播出的雙重保險）
+            if (bgMusic.paused && bgMusic.currentTime === 0) {
+                bgMusic.play().catch(() => {}); 
+            }
+
             const btn = document.getElementById('drawBtn');
             const display = document.getElementById('currentNum');
             btn.disabled = true;
@@ -152,18 +77,14 @@
                 counter++;
                 if (counter > 15) {
                     clearInterval(timer);
-                    finalizeDraw();
+                    const randomIndex = Math.floor(Math.random() * numbers.length);
+                    const picked = numbers.splice(randomIndex, 1)[0];
+                    history.unshift(picked);
+                    display.innerText = picked;
+                    renderHistory();
+                    btn.disabled = false;
                 }
             }, 60);
-        }
-
-        function finalizeDraw() {
-            const randomIndex = Math.floor(Math.random() * numbers.length);
-            const picked = numbers.splice(randomIndex, 1)[0];
-            history.unshift(picked);
-            document.getElementById('currentNum').innerText = picked;
-            renderHistory();
-            document.getElementById('drawBtn').disabled = false;
         }
 
         function renderHistory() {
