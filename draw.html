@@ -27,12 +27,11 @@
             border-radius: 40px; cursor: pointer; font-family: 'Dancing Script', cursive; font-size: 18px;
         }
 
-        /* 歷史號碼球區域 */
         .history-section { width: 100%; text-align: center; padding-top: 15px; z-index: 20; min-height: 130px; }
         .history-section h3 { font-family: 'Dancing Script', cursive; color: var(--secondary); font-size: 34px; margin: 0 0 8px 0; }
         #historyList { 
             display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; 
-            max-height: 120px; padding: 0 25%; /* 讓號碼更集中在中央 */
+            max-height: 120px; padding: 0 30%; 
             overflow-y: visible;
         }
         .history-item {
@@ -42,21 +41,19 @@
             box-shadow: 0 4px 10px rgba(229, 152, 155, 0.12); border: 1px solid #fdf0f1;
         }
 
-        /* 主舞台區 */
         .mid-stage { flex: 1; display: flex; flex-direction: column; align-items: center; z-index: 1; width: 100%; position: relative; padding-top: 5px; }
         
-        /* 照片容器：增加間距 */
+        /* 關鍵修改：照片往內縮至紅線位置 */
         .photo-container {
             position: absolute; 
-            width: 96%; /* 讓容器寬一點 */
+            width: 1000px; /* 固定寬度，讓照片精準收在名字兩側 */
             top: 75px; 
             display: flex; 
-            justify-content: space-between; /* 徹底推向兩邊 */
-            padding: 0 20px; /* 與螢幕邊緣留一點點空隙 */
+            justify-content: space-between; 
             pointer-events: none; z-index: 5;
         }
         .photo-box { 
-            width: 330px; height: 495px; /* 稍微微調大小以符合比例 */
+            width: 320px; height: 480px; 
             border: 1px dashed var(--accent); border-radius: 15px; 
             background: rgba(255,255,255,0.2); backdrop-filter: blur(2px);
             display: flex; align-items: center; justify-content: center;
@@ -75,7 +72,6 @@
             color: var(--gold); margin-bottom: 30px;
         }
 
-        /* 縮小抽獎球尺寸，換取間距 */
         #currentNum {
             font-size: 110px; font-weight: 900; color: var(--secondary);
             background: white; width: 210px; height: 210px;
@@ -107,7 +103,7 @@
 
     <div class="mid-stage">
         <div class="photo-container">
-            <!-- 照片現在分開得很漂亮 -->
+            <!-- 距離經過計算，完美對齊妳畫的紅線範圍 -->
             <div class="photo-box" id="groomBox">新郎婚紗照</div>
             <div class="photo-box" id="brideBox">新娘婚紗照</div>
         </div>
