@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宜芝 & 博鈞 婚禮抽獎機</title>
+    <style>
+        body {
+            font-family: "PingFang TC", sans-serif;
+            background-color: #fffafb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h1 { color: #e5989b; font-size: 32px; margin-bottom: 10px; }
+        
+        /* 大數字顯示區 */
+        #currentNum {
+            font-size: 150px;
+            font-weight: 900;
+            color: #b5838d;
+            background: white;
+            width: 250px;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 10px 40px rgba(229, 152, 155, 0.2);
+            border: 8px solid #ffeaec;
+            margin: 20px 0;
+        }
+
+        /* 抽獎按鈕 */
+        button {
+            padding: 15px 40px;
+            font-size: 24px;
+            background-color: #e5989b;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(229, 152, 155, 0.4);
+            transition: 0.3s;
+        }
+        button:hover { background-color: #d4878a; transform: scale(1.05); }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        /* 已抽過的號碼紀錄 */
+        .history {
+            margin-top: 40px;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .history h3 { color: #b5838d; border-bottom: 2px solid #ffeaec; padding-bottom: 10px; }
+        #historyList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .history-item {
+            background: #ffeaec;
+            color: #6d6875;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>✨ 婚禮賓果抽獎機 ✨</h1>
+    <div id="currentNum">?</div>
+    <button id="drawBtn" onclick="drawNumber()">點擊抽號碼</button>
+
+    <div class="history">
+        <h3>已抽出的號碼</h3>
+        <div id="historyList"></div>
+    </div>
+
+    <script>
+        let numbers = Array.from({length: 75}, (_, i) => i + 1);
+        let history = [];
+
+        function drawNumber() {
+            if (numbers.length === 0) {
+                alert("所有號碼都抽完囉！");
+                document.getElementById('drawBtn').disabled = true;
+                return;
+            }
+
+            const btn = document.getElementById('drawBtn');
+            const display = document.getElementById('currentNum');
+            btn.disabled = true;
+
+            // 跑馬燈動畫效果
+            let counter = 0;
+            let timer = setInterval(() => {
+                display.innerText = Math.floor(Math.random() * 75) + 1;
+                counter++;
+                if (counter > 20) {
+                    clearInterval(timer);
+                    finalizeDraw();
+                }
+            }, 50);
+        }
+
+        function finalizeDraw() {
+            const randomIndex = Math.floor(Math.random() * numbers.length);
+            const picked = numbers.splice(randomIndex, 1)[0];
+            history.push(picked);
+
+            document.getElementById('currentNum').innerText = picked;
+            
+            // 更新歷史紀錄
+            const item = document.createElement('span');
+            item.className = 'history-item';
+            item.innerText = picked;
+            document.getElementById('historyList').appendChild(item);
+
+            document.getElementById('drawBtn').disabled = false;
+        }
+    </script>
+</body>
+</html>
